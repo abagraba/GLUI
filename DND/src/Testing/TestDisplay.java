@@ -12,7 +12,7 @@ import Renderer.VBOManager;
 
 public class TestDisplay {
 
-	private static final boolean shaders = false;
+	private static final boolean shaders = true;
 	private static final boolean textures = true;
 	private static final boolean vbos = true;
 	private static final boolean immediate = false;
@@ -28,14 +28,14 @@ public class TestDisplay {
 
 		glMatrixMode(GL_PROJECTION);
 		glLoadIdentity();
-		glOrtho(-1, 1, -1, 1, 1, -1);
+		glOrtho(0, 1, 0, 1, 1, -1);
 		glMatrixMode(GL_MODELVIEW);
 
 		if (vbos)
 			VBOManager.createVBO("Tile", GL_QUADS, VBOManager.V2T2);
-		// Invalid enum error somewhere here.
+		//FIXME Invalid enum error somewhere here.
 		if (shaders) {
-			ShaderManager.createProgram("Main", "test", "test");
+			ShaderManager.createProgram("Main", "Basic/Textured", "Basic/Textured");
 			ShaderManager.useProgram("Main");
 		}
 
@@ -48,7 +48,6 @@ public class TestDisplay {
 		glClearColor(0.7f, 0.5f, 0.5f, 1);
 		while (!Display.isCloseRequested()) {
 			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
 			if (immediate) {
 				glBegin(GL_QUADS);
 				glTexCoord2f(0, 1);
@@ -83,7 +82,7 @@ public class TestDisplay {
 	}
 
 	public static void main(String[] argv) {
-		TestDisplay d = new TestDisplay();
+		new TestDisplay();
 	}
 
 }

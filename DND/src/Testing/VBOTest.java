@@ -5,10 +5,10 @@ import org.lwjgl.LWJGLException;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.DisplayMode;
 import static org.lwjgl.opengl.GL11.*;
-import static org.lwjgl.opengl.GL15.*;
 import org.lwjgl.util.glu.GLU;
 
-import Renderer.BufferUtil;
+import Renderer.TextureManager;
+import Renderer.VBOManager;
 
 public class VBOTest {
 
@@ -28,31 +28,24 @@ public class VBOTest {
 
 		glClearColor(0.5f, 0.5f, 0.7f, 1);
 
-		int vbo = glGenBuffers();
-		int ind = glGenBuffers();
-		
-		float min = -0.5f, max = 0.5f;
-		float[] vertices = new float[] {min, max, min, min, max, min, max, max};
-		int[] indices = new int[] {0, 1, 2, 3};
-		
-		glBindBuffer(GL_ARRAY_BUFFER, vbo);
-		glBufferData(GL_ARRAY_BUFFER, BufferUtil.asDirectFloatBuffer(vertices), GL_DYNAMIC_DRAW);
-		
-		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ind);
-		glBufferData(GL_ELEMENT_ARRAY_BUFFER, BufferUtil.asDirectIntBuffer(indices), GL_DYNAMIC_DRAW);
+		VBOManager.setRoot("src/Testing/");
+		VBOManager.createVBO("Tile", GL_QUADS, VBOManager.V2T2);
+		TextureManager.setRoot("src/Testing/");
 
+		glEnable(GL_TEXTURE_2D);
+		TextureManager.bindTexture("Test", GL_TEXTURE_2D, GL_NEAREST);
 		
 		while ( !Display.isCloseRequested()) {
 			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-			glColor3f(0.5f, 0.1f, 0.1f);
-			glBindBuffer(GL_ARRAY_BUFFER, vbo);
-			glEnableClientState(GL_VERTEX_ARRAY);
-			glVertexPointer(2, GL_FLOAT, 2 * 4, 0);
-			glDrawElements(GL_QUADS, 4, GL_UNSIGNED_INT, 0);
-			glDisableClientState(GL_VERTEX_ARRAY);
+
+			VBOManager.getVBO("Tile").bind();
+			VBOManager.getVBO("Tile").draw();
+			
 			checkError();
 			Display.update();
 		}
+		VBOManager.cleanAll();
+		TextureManager.cleanAll();
 		Display.destroy();
 	}
 

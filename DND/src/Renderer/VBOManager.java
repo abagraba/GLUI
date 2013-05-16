@@ -36,46 +36,99 @@ public class VBOManager {
 	private static Hashtable<String, VBO> vbos = new Hashtable<String, VBO>();
 	private static String root = "src/Texture/";
 
+	/**
+	 * Returns a VBO object with all the necessary rendering information.
+	 * @param name name of the VBO.
+	 * @return the VBO.
+	 */
 	public static VBO getVBO(String name) {
 		return vbos.get(name);
 	}
 
+	/**
+	 * Initializes a VBO from the specified ITM file.
+	 * @param filename name of the ITM file. The ITM file must exist in the folder specified by root. The filename is specified without filetype. Ex:
+	 *        "Object" not "Object.itm".
+	 * @param type render type of the VBO. Valid values: GL_TRIANGLES, GL_TRIANGLE_FAN, GL_TRIANGLE_STRIP, GL_QUADS, GL_QUAD_STRIP.
+	 * @param interleaving specifies the contents of the interleaved array in the format [V, C, T, N].
+	 */
 	public static void createVBO(String filename, int type, int[] interleaving) {
 		int vboID = glGenBuffers();
 		int indID = glGenBuffers();
 
 		float[] f = ITMReader.readData(root + filename + ".itm");
+		VBO v = new VBO(vboID, indID, f.length, type, interleaving);
 
-		int[] ind = new int[f.length / 2];
+		int[] ind = new int[f.length / v.vertexSize()];
 		for (int i = 0; i < ind.length; i++)
 			ind[i] = i;
 
-		glBindBuffer(GL_ARRAY_BUFFER, vboID);
-		glBufferData(GL_ARRAY_BUFFER, BufferUtil.asDirectFloatBuffer(f), GL_DYNAMIC_DRAW);
-		glBindBuffer(GL_ARRAY_BUFFER, 0);
-
-		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indID);
+		v.bind();
+		glBufferData(GL_ARRAY_BUFFER, BufferUtil.asDirectFloatBuffer(f), GL_STATIC_DRAW);
 		glBufferData(GL_ELEMENT_ARRAY_BUFFER, BufferUtil.asDirectIntBuffer(ind), GL_STATIC_DRAW);
-		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+		v.unbind();
 
-		vbos.put(filename, new VBO(vboID, indID, ind.length, type, interleaving));
+		vbos.put(filename, v);
 	}
 
+	public static void createDynamicVBO(String name, int type, int[] interleaving) {
+		if (!vbos.containsKey("~" + name))
+			vbos.put("~" + name, new VBO(glGenBuffers(), glGenBuffers(), 0, type, interleaving));
+	}
+
+	public static void DynamicDraw(String name, float[] vertices) {
+		if (!vbos.containsKey("~" + name))
+			return;
+		VBO v = vbos.get("~" + name);
+
+		v.bind();
+
+		glBufferData(GL_ARRAY_BUFFER, BufferUtil.asDirectFloatBuffer(vertices), GL_DYNAMIC_DRAW);
+
+		if (v.size != vertices.length) {
+			int[] ind = new int[vertices.length / v.vertexSize()];
+			for (int i = 0; i < ind.length; i++)
+				ind[i] = i;
+			glBufferData(GL_ELEMENT_ARRAY_BUFFER, BufferUtil.asDirectIntBuffer(ind), GL_DYNAMIC_DRAW);
+			v.size = vertices.length;
+		}
+
+		v.enableStates();
+		glDrawElements(v.type, v.size/v.vertexSize(), GL_UNSIGNED_INT, 0);
+		v.disableStates();
+		v.unbind();
+	}
+
+	/**
+	 * Sets the root directory for the VBOManager. All ITM files will be searched for in the root directory.
+	 * @param root new root directory.
+	 */
 	public static void setRoot(String root) {
 		VBOManager.root = root;
 	}
 
+	/**
+	 * Cleans up the specified VBO.
+	 * @param vbo the specified VBO.
+	 */
 	public static void clean(String vbo) {
-		VBO v = vbos.get(vbo);
+		VBO v = vbos.remove(vbo);
 		glDeleteBuffers(v.vboID);
 		glDeleteBuffers(v.indID);
 	}
 
+	/**
+	 * Cleans up the specified VBOs
+	 * @param vbos the specified VBOs.
+	 */
 	public static void clean(String[] vbos) {
 		for (int i = 0; i < vbos.length; i++)
 			clean(vbos[i]);
 	}
 
+	/**
+	 * Cleans up all the VBOs.
+	 */
 	public static void cleanAll() {
 		glBindBuffer(GL_ARRAY_BUFFER, 0);
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
@@ -83,6 +136,7 @@ public class VBOManager {
 			glDeleteBuffers(v.vboID);
 			glDeleteBuffers(v.indID);
 		}
+		vbos.clear();
 	}
 
 	public static class VBO {
@@ -104,8 +158,22 @@ public class VBOManager {
 			glBindBuffer(GL_ARRAY_BUFFER, vboID);
 			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indID);
 		}
+		public void unbind(){
+			glBindBuffer(GL_ARRAY_BUFFER, 0);
+			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+		}
+
+		public int vertexSize() {
+			return interleaving[V] + interleaving[C] + interleaving[T] + interleaving[N];
+		}
 
 		public void draw() {
+			enableStates();
+			glDrawElements(type, size, GL_UNSIGNED_INT, 0);
+			disableStates();
+		}
+
+		public void enableStates() {
 			int vOff = 0;
 			int cOff = interleaving[V] * 4;
 			int tOff = cOff + interleaving[C] * 4;
@@ -128,9 +196,9 @@ public class VBOManager {
 				glEnableClientState(GL_NORMAL_ARRAY);
 				glNormalPointer(GL_FLOAT, stride, nOff);
 			}
+		}
 
-			glDrawElements(type, size, GL_UNSIGNED_INT, 0);
-
+		public void disableStates() {
 			if (interleaving[V] > 0)
 				glDisableClientState(GL_VERTEX_ARRAY);
 			if (interleaving[C] > 0)
