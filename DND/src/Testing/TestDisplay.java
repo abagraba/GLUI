@@ -6,9 +6,9 @@ import org.lwjgl.opengl.DisplayMode;
 import static org.lwjgl.opengl.GL11.*;
 import org.lwjgl.util.glu.GLU;
 
-import Renderer.ShaderManager;
-import Renderer.TextureManager;
-import Renderer.VBOManager;
+import GLUICore.ShaderManager;
+import GLUICore.TextureManager;
+import GLUICore.VBOManager;
 
 public class TestDisplay {
 

@@ -7,8 +7,8 @@ import org.lwjgl.opengl.DisplayMode;
 import static org.lwjgl.opengl.GL11.*;
 import org.lwjgl.util.glu.GLU;
 
-import Renderer.TextureManager;
-import Renderer.VBOManager;
+import GLUICore.TextureManager;
+import GLUICore.VBOManager;
 
 public class VBOTest {
 
@@ -29,7 +29,7 @@ public class VBOTest {
 		glClearColor(0.5f, 0.5f, 0.7f, 1);
 
 		VBOManager.setRoot("src/Testing/");
-		VBOManager.createVBO("Tile", GL_QUADS, VBOManager.V2T2);
+		VBOManager.createVBO("Square", GL_QUADS, VBOManager.V2T2);
 		TextureManager.setRoot("src/Testing/");
 
 		glEnable(GL_TEXTURE_2D);
@@ -38,8 +38,8 @@ public class VBOTest {
 		while ( !Display.isCloseRequested()) {
 			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-			VBOManager.getVBO("Tile").bind();
-			VBOManager.getVBO("Tile").draw();
+			VBOManager.getVBO("Square").bind();
+			VBOManager.getVBO("Square").draw();
 			
 			checkError();
 			Display.update();

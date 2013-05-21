@@ -8,10 +8,10 @@ import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.opengl.GL15.*;
 import org.lwjgl.util.glu.GLU;
 
-import Renderer.BufferUtil;
-import Renderer.ShaderManager;
-import Renderer.TextureManager;
-import Renderer.VBOManager;
+import GLUICore.BufferUtil;
+import GLUICore.ShaderManager;
+import GLUICore.TextureManager;
+import GLUICore.VBOManager;
 
 public class VBOProfile {
 

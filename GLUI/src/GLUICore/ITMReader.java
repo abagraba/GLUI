@@ -1,4 +1,4 @@
-package Renderer;
+package GLUICore;
 
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;

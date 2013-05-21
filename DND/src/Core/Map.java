@@ -3,7 +3,7 @@ package Core;
 import java.awt.Rectangle;
 import java.util.Random;
 
-import Renderer.RenderData;
+import GLUICore.RenderData;
 import Renderer.TileMap;
 import Renderer.TileMapTexture;
 
@@ -30,17 +30,12 @@ public class Map extends TileMap {
 				if (renderlayerID == 1 || renderlayerID == 2)
 					res[x][y] = random(xn, yn) == 0 ? getWall(renderlayerID == 1 ? getNeighbors(xn, yn) : getDNeighbors(xn,
 							yn)) : null;
-				if (renderlayerID == 3)
-					res[x][y] = random(xn, yn) == 0 ? getWall(getNeighbors(xn, yn)) : null;
+				//if (renderlayerID == 3)
+					//res[x][y] = random(xn, yn) == 0 ? getWall(getNeighbors(xn, yn)) : null;
 			}
 		return res;
 	}
 
-//	147a + 10b + 25c = 49d
-//	147a + 10b + 16c = 42d
-//	147a + 10b + 11c = 38d
-//	c = 0.75
-	
 	private RenderData getWall(boolean[] n) {
 		if (n[0] && n[2]) {
 			if (n[1] && n[3])
@@ -135,6 +130,8 @@ public class Map extends TileMap {
 	}
 
 	public int random(int x, int y) {
+		if (x == 0 || y == 0 || x == w-1 || y == h-1)
+			return 0;
 		Random r = new Random(x * x * x * 1000 + y * y * 8000);
 		return r.nextBoolean() ? 1 : 0;
 		// return ((y + x * x) % (x + 1) + (x * y + y)) % 2;

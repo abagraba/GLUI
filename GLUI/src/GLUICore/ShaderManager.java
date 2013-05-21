@@ -1,4 +1,4 @@
-package Renderer;
+package GLUICore;
 
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
@@ -122,8 +122,10 @@ public class ShaderManager {
 	 */
 	public static void initShader(String shader, int type) {
 		int buffer = glCreateShader(type);
-		if (buffer == 0)
-			return;// TODO Free buffer? Clean up failed initialization.
+		if (buffer == 0){
+			System.out.println("Failure to initialize shader");
+			return;
+		}
 		// Initialize Shader
 		glShaderSource(buffer, getShaderData(shader));
 		// Compile shader

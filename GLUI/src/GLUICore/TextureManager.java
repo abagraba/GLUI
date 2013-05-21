@@ -1,4 +1,4 @@
-package Renderer;
+package GLUICore;
 
 import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferByte;
@@ -9,6 +9,8 @@ import java.util.Hashtable;
 import javax.imageio.ImageIO;
 
 import org.lwjgl.opengl.GL11;
+
+import GLUICore.BufferUtil;
 
 import static org.lwjgl.opengl.GL11.*;
 

@@ -11,11 +11,12 @@ import org.lwjgl.opengl.DisplayMode;
 import static org.lwjgl.opengl.GL11.*;
 import org.lwjgl.util.glu.GLU;
 
-import Renderer.ShaderManager;
-import Renderer.TextureManager;
+import Core.MapView;
+import GLUICore.ShaderManager;
+import GLUICore.TextureManager;
+import GLUICore.VBOManager;
 import Renderer.TileMap;
 import Renderer.TileMapRenderer;
-import Renderer.VBOManager;
 
 public class TileMapTest {
 
@@ -33,7 +34,7 @@ public class TileMapTest {
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 		
 		TileMap tm = new Map(20, 20);
-		TileMapRenderer tmr = new TileMapRenderer(50, 50, 700, 500, tm);
+		TileMapRenderer tmr = new MapView(50, 50, 700, 500, tm);
 		tmr.zoom(15);
 		
 		
@@ -55,7 +56,7 @@ public class TileMapTest {
 					tmr.move(new Point(dx, dy));
 				}
 			}
-			tmr.zoom(Mouse.getDWheel(), new Point(Mouse.getX(), Mouse.getY()));
+			tmr.zoom(Mouse.getDWheel(), Mouse.getX(), Mouse.getY());
 
 			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 			tmr.render();

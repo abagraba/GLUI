@@ -1,9 +1,12 @@
-package Renderer;
+package GLUICore;
 
 import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.opengl.GL15.*;
 
 import java.util.Hashtable;
+
+import GLUICore.BufferUtil;
+import GLUICore.ITMReader;
 
 public class VBOManager {
 

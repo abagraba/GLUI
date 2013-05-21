@@ -1,4 +1,4 @@
-package Renderer;
+package GLUICore;
 
 import java.nio.ByteBuffer;
 import java.nio.FloatBuffer;

@@ -5,6 +5,10 @@ import java.awt.Rectangle;
 
 import org.lwjgl.opengl.GL11;
 
+import GLUICore.RenderData;
+import GLUICore.TextureManager;
+import GLUICore.VBOManager;
+
 
 public abstract class TileMap {
 
@@ -73,10 +77,10 @@ public abstract class TileMap {
 			rot %= 4;
 			int x = 0;
 			int y = 0;
-			if (rot > 1)
-				x = 1;
 			if (rot > 0 && rot < 3)
 				y = 1;
+			if (rot > 1)
+				x = 1;
 			data[off + i * 4 + 2] = (x + tx) / (float) tex.texWidth;
 			data[off + i * 4 + 3] = (y + ty) / (float) tex.texHeight;
 		}

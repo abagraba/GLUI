@@ -5,7 +5,10 @@ import static org.lwjgl.opengl.GL11.*;
 import java.awt.Point;
 import java.awt.Rectangle;
 
-public class TileMapRenderer extends Pane {
+import GLUICore.Pane;
+import GLUICore.ShaderManager;
+
+public abstract class TileMapRenderer extends Pane {
 
 	public TileMapRenderer(int x, int y, int width, int height, TileMap tm) {
 		super(x, y, width, height);
@@ -36,12 +39,12 @@ public class TileMapRenderer extends Pane {
 			xx = -viewPos.x;
 		if (viewPos.y < 0)
 			yy = -viewPos.y;
-		if (xx != 0 && yy != 0){
+		if (xx != 0 || yy != 0){
 			glPushMatrix();
 			glTranslatef(xx, yy, 0);
 		}
 		tm.render(getClip());
-		if (xx != 0 && yy != 0)
+		if (xx != 0 || yy != 0)
 			glPopMatrix();
 	}
 
@@ -55,7 +58,7 @@ public class TileMapRenderer extends Pane {
 	}
 
 	public void zoom(int dz) {
-		zoom(dz, new Point(width / 2, height / 2));
+		zoom(dz, width / 2, height / 2);
 	}
 
 	/**
@@ -63,10 +66,10 @@ public class TileMapRenderer extends Pane {
 	 * @param dz change in tileSize().
 	 * @param p point offset from origin indicating position of cursor in the viewport.
 	 */
-	public void zoom(int dz, Point p) {
+	public void zoom(int dz, int xP, int yP) {
 		//FIXME zoom does not center properly.
 		int oldZoom = zoom;
-		zoom += (dz / 120);
+		zoom += dz;
 		if (zoom < minZoom)
 			zoom = minZoom;
 		if (zoom > maxZoom)
@@ -74,16 +77,16 @@ public class TileMapRenderer extends Pane {
 
 		if (zoom == oldZoom)
 			return;
-		p.x -= x;
-		p.y -= y;
-		viewPos.x += p.x / tileSize(oldZoom);
-		viewPos.y += p.y / tileSize(oldZoom);
+		xP -= x;
+		yP -= y;
+		viewPos.x += xP / tileSize(oldZoom);
+		viewPos.y += yP / tileSize(oldZoom);
 		viewPos.x *= tileSize(zoom);
 		viewPos.y *= tileSize(zoom);
 		viewPos.x /= tileSize(oldZoom);
 		viewPos.y /= tileSize(oldZoom);
-		viewPos.x -= p.x / tileSize(zoom);
-		viewPos.y -= p.y / tileSize(zoom);
+		viewPos.x -= xP / tileSize(zoom);
+		viewPos.y -= yP / tileSize(zoom);
 		validatePosition();
 	}
 
@@ -107,6 +110,7 @@ public class TileMapRenderer extends Pane {
 			viewPos.x = (tm.w - tileWidth()) / 2.0f;
 		if (tm.h <= tileHeight())
 			viewPos.y = (tm.h - tileHeight()) / 2.0f;
+		System.out.println(viewPos.y);
 
 		if (tm.w > tileWidth()) {
 			if (viewPos.x < 0)
@@ -135,7 +139,7 @@ public class TileMapRenderer extends Pane {
 	private int tileSize(int zoom) {
 		return (int) Math.pow(2, zoom);
 	}
-
+	
 	public int tileWidth() {
 		return width / tileSize(zoom);
 	}
