@@ -10,16 +10,12 @@ public class FixedSplitPane extends Pane {
 	Pane topleft;
 	Pane botright;
 
-	/**
-	 * @param x
-	 * @param y
-	 * @param width
-	 * @param height
-	 * @param ratio Set whether the split is an offset from the left or the right.
-	 */
-	public FixedSplitPane(int x, int y, int width, int height, boolean anchorTopLeft, boolean horizontal) {
-		super(x, y, width, height);
-		this.split = horizontal ? width / 2 : height / 2;
+	public FixedSplitPane(boolean anchorTopLeft, boolean horizontal) {
+		this(anchorTopLeft, horizontal, Integer.MIN_VALUE);
+	}
+
+	public FixedSplitPane(boolean anchorTopLeft, boolean horizontal, int split) {
+		this.split = split;
 		this.anchorTopLeft = anchorTopLeft;
 		this.horizontal = horizontal;
 	}
@@ -56,6 +52,8 @@ public class FixedSplitPane extends Pane {
 
 	@Override
 	public void validatePosition() {
+		if (split == Integer.MIN_VALUE)
+			split = horizontal ? width / 2 : height / 2;
 		if (split < 0)
 			split = 0;
 		if (split > (horizontal ? width : height))
@@ -68,12 +66,5 @@ public class FixedSplitPane extends Pane {
 					- (horizontal ? splitFromAnchor : 0), height - (horizontal ? 0 : splitFromAnchor));
 	}
 
-	@Override
-	public void render() {
-		if (topleft != null)
-			topleft.render();
-		if (botright != null)
-			botright.render();
-	}
 
 }

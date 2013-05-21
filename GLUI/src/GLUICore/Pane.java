@@ -2,6 +2,8 @@ package GLUICore;
 
 import java.util.LinkedList;
 
+import org.lwjgl.opengl.GL11;
+
 public abstract class Pane extends EventHandler {
 
 	// TODO rename to container?
@@ -10,6 +12,12 @@ public abstract class Pane extends EventHandler {
 	private Pane keyFocus = null;
 
 	protected int x, y, width, height;
+
+	private int xV, yV, wV, hV;
+	
+	public Pane() {
+
+	}
 
 	public Pane(int x, int y, int width, int height) {
 		this.x = x;
@@ -100,11 +108,23 @@ public abstract class Pane extends EventHandler {
 
 	public abstract void validatePosition();
 
-	protected void prerender() {
+	protected void viewportOffset(int xV, int yV, int wV, int hV){
+		this.xV = xV;
+		this.yV = yV;
+		this.wV = wV;
+		this.hV = hV;
+	}
+	
+	private void setViewport(int x, int y, int w, int h){
+		GL11.glViewport(x + xV, y + yV, w + wV, h + hV);
+	}
+	
+	protected void prerender(int xOff, int yOff) {
 		if (width > 0 && height > 0) {
+			setViewport(xOff, yOff, width, height);
 			render();
 			for (Pane p : contents)
-				p.prerender();
+				p.prerender(xOff + x, yOff + y);
 		}
 	}
 

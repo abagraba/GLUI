@@ -90,9 +90,9 @@ public class ShaderManager {
 		glAttachShader(program, f);
 		// Link shaders
 		glLinkProgram(program);
-		glGetShader(program, GL_LINK_STATUS);
-		System.out.println(GL11.glGetError());
-//		TODO fix invalid enum.
+//		glGetShader(program, GL_LINK_STATUS);
+//		System.out.println(GL11.glGetError());
+//		FIXME fix invalid enum.
 //		if (glGetShader(program, GL_LINK_STATUS) == GL11.GL_FALSE)
 //			throw new ProgramException("Linking");
 		glValidateProgram(program);

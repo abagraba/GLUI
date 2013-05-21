@@ -33,7 +33,6 @@ public class TestDisplay {
 
 		if (vbos)
 			VBOManager.createVBO("Tile", GL_QUADS, VBOManager.V2T2);
-		//FIXME Invalid enum error somewhere here.
 		if (shaders) {
 			ShaderManager.createProgram("Main", "Basic/Textured", "Basic/Textured");
 			ShaderManager.useProgram("Main");

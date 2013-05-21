@@ -26,26 +26,15 @@ public abstract class TileMapRenderer extends Pane {
 		int tileWidth = width / tileSize(zoom);
 		int tileHeight = height / tileSize(zoom);
 
-		setViewport();
 		glMatrixMode(GL_PROJECTION);
 		glLoadIdentity();
 		glOrtho(0, tileWidth, 0, tileHeight, -1, 1);
 		glMatrixMode(GL_MODELVIEW);
-
+		glLoadIdentity();
+		
 		ShaderManager.useDefault(ShaderManager.TEXTURE);
 
-		float xx = 0, yy = 0;
-		if (viewPos.x < 0)
-			xx = -viewPos.x;
-		if (viewPos.y < 0)
-			yy = -viewPos.y;
-		if (xx != 0 || yy != 0){
-			glPushMatrix();
-			glTranslatef(xx, yy, 0);
-		}
 		tm.render(getClip());
-		if (xx != 0 || yy != 0)
-			glPopMatrix();
 	}
 
 	/**
@@ -91,18 +80,6 @@ public abstract class TileMapRenderer extends Pane {
 	}
 
 	/**
-	 * Sets the Viewport to display the maximum integral number of tiles in each direction given maximum dimensions. Will not exceed with and height.
-	 * Will be centered in the rectangle defined by x, y, width, and height.
-	 */
-	private void setViewport() {
-		int dx = (width % tileSize(zoom)) / 2;
-		int dy = (height % tileSize(zoom)) / 2;
-		int w = tileSize(zoom) * (width / tileSize(zoom));
-		int h = tileSize(zoom) * (height / tileSize(zoom));
-		glViewport(x + dx, y + dy, w, h);
-	}
-
-	/**
 	 * Clamps map position to valid values. Should be called after any change to the map's viewing parameters or dimensions.
 	 */
 	public void validatePosition() {
@@ -110,7 +87,6 @@ public abstract class TileMapRenderer extends Pane {
 			viewPos.x = (tm.w - tileWidth()) / 2.0f;
 		if (tm.h <= tileHeight())
 			viewPos.y = (tm.h - tileHeight()) / 2.0f;
-		System.out.println(viewPos.y);
 
 		if (tm.w > tileWidth()) {
 			if (viewPos.x < 0)
@@ -124,6 +100,20 @@ public abstract class TileMapRenderer extends Pane {
 			if (viewPos.y > tm.h - tileHeight())
 				viewPos.y = tm.h - tileHeight();
 		}
+
+		//Center the TileMap using a viewport offset.
+		int dx = 0, dy = 0, dw, dh;
+		dw = tileSize(zoom) * (width / tileSize(zoom)) - width;
+		dh = tileSize(zoom) * (height / tileSize(zoom)) - height;
+		if (viewPos.x < 0)
+			dx = (int) (-viewPos.x*tileSize(zoom));
+		else 
+			dx = -dw/2;
+		if (viewPos.y < 0)
+			dy = (int) (-viewPos.y*tileSize(zoom));
+		else
+			dy = -dh/2;
+		viewportOffset(dx, dy, dw, dh);
 	}
 
 	private Rectangle getClip() {
