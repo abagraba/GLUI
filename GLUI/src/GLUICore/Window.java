@@ -13,7 +13,7 @@ public abstract class Window {
 
 	private Pane contentPane;
 	private int fps = 60;
-	private boolean debugFramerate = false;
+	private boolean debugFramerate = true;
 
 	public Window(int w, int h) {
 		try {
@@ -23,23 +23,26 @@ public abstract class Window {
 			e.printStackTrace();
 			System.exit(0);
 		}
-
-		contentPane = new Pane(0, 0, w, h) {
+		contentPane = new Pane() {
 			@Override
 			public void validatePosition() {}
 		};
 
-		glInit();
-
+		Mouse.getDX();
+		Mouse.getDY();
 		Mouse.getDWheel();
+		
+		repack();
+
+		glInit();
 		glClearColor(0f, 0f, 0f, 1);
 	}
-
-	public abstract void glInit();
 
 	public void setContentPane(Pane p) {
 		contentPane = p;
 	}
+
+	public abstract void glInit();
 
 	public void repack() {
 		if (contentPane != null)
@@ -89,6 +92,7 @@ public abstract class Window {
 	}
 
 	public final void handleEvents() {
+		//FIXME let window handle events too
 		while (Keyboard.next())
 			if (contentPane != null)
 				contentPane.handleKeyEvent(new KeyEvent(Keyboard.getEventKey(), Keyboard.getEventKeyState()));

@@ -22,7 +22,7 @@ public class TextureManager {
 	private static Hashtable<String, Integer> textures = new Hashtable<String, Integer>();
 	private static String root = "src/Texture/";
 
-	//TODO fix Texture Binding
+	//TODO fix Texture Binding. If texture already bound then ignore this.
 	public static void bindTexture(String name, int type, int filter) {
 		if (!textures.containsKey(name))
 			createTexture(name, filter);
