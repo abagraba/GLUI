@@ -32,11 +32,11 @@ public class VBOProfile {
 		glLoadIdentity();
 		
 		VBOManager.setRoot("src/Testing/");
-		VBOManager.createVBO("Tile", GL_QUADS, VBOManager.V2T2);
+		VBOManager.createStaticVBO("Tile", GL_QUADS, VBOManager.V2T2);
 
 		glEnable(GL_TEXTURE_2D);
 		TextureManager.setRoot("src/Testing/");
-		TextureManager.bindTexture("Test", GL_TEXTURE_2D, GL_NEAREST);
+		TextureManager.useTexture("Test", GL_TEXTURE_2D, GL_NEAREST);
 
 		glClearColor(0.7f, 0.5f, 0.5f, 1);
 		while (!Display.isCloseRequested()) {
@@ -118,6 +118,7 @@ public class VBOProfile {
 			System.out.println(GLU.gluErrorString(error));
 	}
 
+	@SuppressWarnings("unused")
 	public static void main(String[] argv) {
 		new VBOProfile();
 	}

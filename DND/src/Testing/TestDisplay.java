@@ -1,11 +1,31 @@
 package Testing;
 
+import static org.lwjgl.opengl.GL11.GL_COLOR_BUFFER_BIT;
+import static org.lwjgl.opengl.GL11.GL_DEPTH_BUFFER_BIT;
+import static org.lwjgl.opengl.GL11.GL_MODELVIEW;
+import static org.lwjgl.opengl.GL11.GL_NEAREST;
+import static org.lwjgl.opengl.GL11.GL_NO_ERROR;
+import static org.lwjgl.opengl.GL11.GL_PROJECTION;
+import static org.lwjgl.opengl.GL11.GL_QUADS;
+import static org.lwjgl.opengl.GL11.GL_TEXTURE_2D;
+import static org.lwjgl.opengl.GL11.glBegin;
+import static org.lwjgl.opengl.GL11.glClear;
+import static org.lwjgl.opengl.GL11.glClearColor;
+import static org.lwjgl.opengl.GL11.glEnable;
+import static org.lwjgl.opengl.GL11.glEnd;
+import static org.lwjgl.opengl.GL11.glGetError;
+import static org.lwjgl.opengl.GL11.glLoadIdentity;
+import static org.lwjgl.opengl.GL11.glMatrixMode;
+import static org.lwjgl.opengl.GL11.glOrtho;
+import static org.lwjgl.opengl.GL11.glTexCoord2f;
+import static org.lwjgl.opengl.GL11.glVertex2f;
+
 import org.lwjgl.LWJGLException;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.DisplayMode;
-import static org.lwjgl.opengl.GL11.*;
 import org.lwjgl.util.glu.GLU;
 
+import GLUICore.InterleavedVBO;
 import GLUICore.ShaderManager;
 import GLUICore.TextureManager;
 import GLUICore.VBOManager;
@@ -21,7 +41,8 @@ public class TestDisplay {
 		try {
 			Display.setDisplayMode(new DisplayMode(800, 600));
 			Display.create();
-		} catch (LWJGLException e) {
+		}
+		catch (LWJGLException e) {
 			e.printStackTrace();
 			System.exit(0);
 		}
@@ -32,7 +53,7 @@ public class TestDisplay {
 		glMatrixMode(GL_MODELVIEW);
 
 		if (vbos)
-			VBOManager.createVBO("Tile", GL_QUADS, VBOManager.V2T2);
+			VBOManager.createStaticVBO("Tile", GL_QUADS, InterleavedVBO.V2T2);
 		if (shaders) {
 			ShaderManager.createProgram("Main", "Basic/Textured", "Basic/Textured");
 			ShaderManager.useProgram("Main");
@@ -40,7 +61,7 @@ public class TestDisplay {
 
 		if (textures) {
 			glEnable(GL_TEXTURE_2D);
-			TextureManager.bindTexture("Test", GL_TEXTURE_2D, GL_NEAREST);
+			TextureManager.useTexture("Test", GL_TEXTURE_2D, GL_NEAREST);
 		}
 		// glViewport(0, 0, 300, 300);
 
@@ -74,12 +95,13 @@ public class TestDisplay {
 		Display.destroy();
 	}
 
-	private void checkError() {
+	private static void checkError() {
 		int error = glGetError();
 		if (error != GL_NO_ERROR)
 			System.out.println(GLU.gluErrorString(error));
 	}
 
+	@SuppressWarnings("unused")
 	public static void main(String[] argv) {
 		new TestDisplay();
 	}

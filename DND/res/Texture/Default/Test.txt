@@ -1,0 +1,4 @@
+Width: 2
+Height: 2
+Base: 0
+Tile: 0

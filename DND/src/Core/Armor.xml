@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE ArmorList [
+<!ELEMENT Armor (Name, Class, AC, DEXCap, ArmorCheck, SpellFail, Weight, Price)>
+<!ATTLIST Armor id CDATA #REQUIRED>
+<!ELEMENT Name (#PCDATA)>
+<!ELEMENT Class (#PCDATA)>
+<!ELEMENT AC (#PCDATA)>
+<!ELEMENT DEXCap (#PCDATA)>
+<!ELEMENT ArmorCheck (#PCDATA)>
+<!ELEMENT SpellFail (#PCDATA)>
+<!ELEMENT Weight (#PCDATA)>
+<!ELEMENT Price (#PCDATA)>
+]>
+
+<ArmorList>
+	<Armor id="Padded">
+		<Name>Padded Leather Armor</Name>
+		<Class>Light</Class>
+		<AC>1</AC>
+		<DEXCap>8</DEXCap>
+		<ArmorCheck>0</ArmorCheck>
+		<SpellFail>0.05</SpellFail>
+		<Weight>10</Weight>
+		<Price>5</Price>
+	</Armor>
+	<Armor id="Leather">
+		<Name>Leather Armor</Name>
+		<Class>Light</Class>
+		<AC>2</AC>
+		<DEXCap>6</DEXCap>
+		<ArmorCheck>0</ArmorCheck>
+		<SpellFail>0.1</SpellFail>
+		<Weight>15</Weight>
+		<Price>10</Price>
+	</Armor>
+	<Armor id="Studded">
+		<Name>Studded Leather Armor</Name>
+		<Class>Light</Class>
+		<AC>3</AC>
+		<DEXCap>5</DEXCap>
+		<ArmorCheck>-1</ArmorCheck>
+		<SpellFail>0.15</SpellFail>
+		<Weight>20</Weight>
+		<Price>25</Price>
+	</Armor>
+	<Armor id="Chain">
+		<Name>Chain Shirt</Name>
+		<Class>Light</Class>
+		<AC>4</AC>
+		<DEXCap>4</DEXCap>
+		<ArmorCheck>-2</ArmorCheck>
+		<SpellFail>0.2</SpellFail>
+		<Weight>25</Weight>
+		<Price>100</Price>
+	</Armor>
+	<Armor id="Hide">
+		<Name>Hide Armor</Name>
+		<Class>Medium</Class>
+		<AC>3</AC>
+		<DEXCap>4</DEXCap>
+		<ArmorCheck>-3</ArmorCheck>
+		<SpellFail>0.2</SpellFail>
+		<Weight>25</Weight>
+		<Price>15</Price>
+	</Armor>
+	<Armor id="Scale">
+		<Name>Scale Mail</Name>
+		<Class>Medium</Class>
+		<AC>4</AC>
+		<DEXCap>3</DEXCap>
+		<ArmorCheck>-4</ArmorCheck>
+		<SpellFail>0.25</SpellFail>
+		<Weight>30</Weight>
+		<Price>50</Price>
+	</Armor>
+	<Armor id="Chainmail">
+		<Name>Chainmail</Name>
+		<Class>Medium</Class>
+		<AC>5</AC>
+		<DEXCap>2</DEXCap>
+		<ArmorCheck>-5</ArmorCheck>
+		<SpellFail>0.3</SpellFail>
+		<Weight>40</Weight>
+		<Price>150</Price>
+	</Armor>
+	<Armor id="Breastplate">
+		<Name>Breastplate</Name>
+		<Class>Medium</Class>
+		<AC>5</AC>
+		<DEXCap>3</DEXCap>
+		<ArmorCheck>-4</ArmorCheck>
+		<SpellFail>0.25</SpellFail>
+		<Weight>30</Weight>
+		<Price>200</Price>
+	</Armor>
+	<Armor id="Splint">
+		<Name>Splint Mail</Name>
+		<Class>Heavy</Class>
+		<AC>6</AC>
+		<DEXCap>0</DEXCap>
+		<ArmorCheck>-7</ArmorCheck>
+		<SpellFail>0.4</SpellFail>
+		<Weight>45</Weight>
+		<Price>200</Price>
+	</Armor>
+	<Armor id="Banded">
+		<Name>Banded Mail</Name>
+		<Class>Heavy</Class>
+		<AC>6</AC>
+		<DEXCap>1</DEXCap>
+		<ArmorCheck>-6</ArmorCheck>
+		<SpellFail>0.35</SpellFail>
+		<Weight>35</Weight>
+		<Price>250</Price>
+	</Armor>
+	<Armor id="Half">
+		<Name>Half-Plate</Name>
+		<Class>Heavy</Class>
+		<AC>7</AC>
+		<DEXCap>0</DEXCap>
+		<ArmorCheck>-7</ArmorCheck>
+		<SpellFail>0.4</SpellFail>
+		<Weight>50</Weight>
+		<Price>600</Price>
+	</Armor>
+	<Armor id="Full">
+		<Name>Full-Plate</Name>
+		<Class>Heavy</Class>
+		<AC>8</AC>
+		<DEXCap>1</DEXCap>
+		<ArmorCheck>-6</ArmorCheck>
+		<SpellFail>0.35</SpellFail>
+		<Weight>50</Weight>
+		<Price>1500</Price>
+	</Armor>
+</ArmorList>

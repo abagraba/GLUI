@@ -29,11 +29,11 @@ public class VBOTest {
 		glClearColor(0.5f, 0.5f, 0.7f, 1);
 
 		VBOManager.setRoot("src/Testing/");
-		VBOManager.createVBO("Square", GL_QUADS, VBOManager.V2T2);
+		VBOManager.createStaticVBO("Square", GL_QUADS, VBOManager.V2T2);
 		TextureManager.setRoot("src/Testing/");
 
 		glEnable(GL_TEXTURE_2D);
-		TextureManager.bindTexture("Test", GL_TEXTURE_2D, GL_NEAREST);
+		TextureManager.useTexture("Test", GL_TEXTURE_2D, GL_NEAREST);
 		
 		while ( !Display.isCloseRequested()) {
 			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -55,6 +55,7 @@ public class VBOTest {
 			System.out.println(GLU.gluErrorString(error));
 	}
 
+	@SuppressWarnings("unused")
 	public static void main(String[] argv) {
 		new VBOTest();
 	}

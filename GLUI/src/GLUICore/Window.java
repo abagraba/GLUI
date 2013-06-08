@@ -1,6 +1,13 @@
 package GLUICore;
 
-import static org.lwjgl.opengl.GL11.*;
+import static org.lwjgl.opengl.GL11.GL_COLOR_BUFFER_BIT;
+import static org.lwjgl.opengl.GL11.GL_DEPTH_BUFFER_BIT;
+import static org.lwjgl.opengl.GL11.GL_NO_ERROR;
+import static org.lwjgl.opengl.GL11.glClear;
+import static org.lwjgl.opengl.GL11.glClearColor;
+import static org.lwjgl.opengl.GL11.glGetError;
+
+import java.io.File;
 
 import org.lwjgl.LWJGLException;
 import org.lwjgl.input.Keyboard;
@@ -9,21 +16,22 @@ import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.DisplayMode;
 import org.lwjgl.util.glu.GLU;
 
-public abstract class Window {
+public abstract class Window extends EventHandler {
 
-	private Pane contentPane;
-	private int fps = 60;
-	private boolean debugFramerate = true;
+	private RenderContainer contentPane;
+	private final int fps = 60;
+	public static boolean profileInfo = false;
 
 	public Window(int w, int h) {
 		try {
 			Display.setDisplayMode(new DisplayMode(w, h));
 			Display.create();
-		} catch (LWJGLException e) {
+		}
+		catch (LWJGLException e) {
 			e.printStackTrace();
 			System.exit(0);
 		}
-		contentPane = new Pane() {
+		contentPane = new RenderContainer() {
 			@Override
 			public void validatePosition() {}
 		};
@@ -31,22 +39,29 @@ public abstract class Window {
 		Mouse.getDX();
 		Mouse.getDY();
 		Mouse.getDWheel();
-		
+
 		repack();
 
 		glInit();
 		glClearColor(0f, 0f, 0f, 1);
+
+		ResourceManager.setRoot(new File("../DND/res"));
+		ResourceManager.setTextureRoot("/Texture");
+
 	}
 
-	public void setContentPane(Pane p) {
+	public void setContentPane(RenderContainer p) {
 		contentPane = p;
 	}
 
 	public abstract void glInit();
 
 	public void repack() {
-		if (contentPane != null)
-			contentPane.resize(0, 0, Display.getWidth(), Display.getHeight());
+		if (contentPane != null) {
+			contentPane.reposition(0, 0);
+			contentPane.resize(Display.getWidth(), Display.getHeight());
+			contentPane.repack();
+		}
 	}
 
 	public void render() {
@@ -62,19 +77,22 @@ public abstract class Window {
 			handleEvents();
 			checkError();
 
-			if (debugFramerate)
-				System.out.println((System.nanoTime() - t) / 1000000.0f + "ms");
+			if (profileInfo) {
+				Debug.profile("Frame Render Time", System.nanoTime() - t, 0, 0);
+				Debug.logProfile();
+			}
 
 			Display.sync(fps);
+
 		}
 		cleanup();
 	}
 
-	public void add(Pane p) {
+	public void add(RenderContainer p) {
 		contentPane.add(p);
 	}
 
-	public void remove(Pane p) {
+	public void remove(RenderContainer p) {
 		contentPane.remove(p);
 	}
 
@@ -88,11 +106,11 @@ public abstract class Window {
 	protected void checkError() {
 		int error = glGetError();
 		if (error != GL_NO_ERROR)
-			System.out.println(GLU.gluErrorString(error));
+			Debug.log(GLU.gluErrorString(error));
 	}
 
 	public final void handleEvents() {
-		//FIXME let window handle events too
+		// FIXME let window handle events too
 		while (Keyboard.next())
 			if (contentPane != null)
 				contentPane.handleKeyEvent(new KeyEvent(Keyboard.getEventKey(), Keyboard.getEventKeyState()));
