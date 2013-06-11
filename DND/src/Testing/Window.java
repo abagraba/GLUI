@@ -7,34 +7,18 @@ import static org.lwjgl.opengl.GL11.GL_TEXTURE_2D;
 import static org.lwjgl.opengl.GL11.glBlendFunc;
 import static org.lwjgl.opengl.GL11.glClearColor;
 import static org.lwjgl.opengl.GL11.glEnable;
-import GLUICore.Renderable;
-import GLUIRenderer.CenterPane;
 
-public class Window extends GLUICore.Window {
-
-	Renderable r = new TestPane();
+public class Window extends GLUI.Window {
 
 	public Window(int w, int h) {
 		super(w, h);
-		CenterPane cp = new CenterPane();
-		setContentPane(cp);
+		setContentPane(new TestContentPane());
 
-		// TSM tsm = new TSM();
-		// cp.add(tsm);
-
-		/*
-		 * tsm.addLayer(new TSL() {
-		 * 
-		 * @Override public Collection<T> tileData() { LinkedList<T> tiles = new LinkedList<T>(); tiles.add(new T(0, 0,
-		 * "Stone", 1)); return tiles; } });
-		 */
-
-		cp.add(r);
 		glClearColor(0f, 0f, 0f, 1);
 
 		repack();
-		System.out.println(r);
-		GLUICore.Window.profileInfo = true;
+		GLUI.Window.profileInfo = false;
+
 		render();
 	}
 

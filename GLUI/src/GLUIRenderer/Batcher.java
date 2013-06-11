@@ -3,10 +3,10 @@ package GLUIRenderer;
 import java.util.HashMap;
 import java.util.LinkedList;
 
-import GLUICore.Debug;
-import GLUICore.InterleavedVBO;
-import GLUICore.TextureManager;
-import GLUICore.VBOManager;
+import GLUI.Debug;
+import GLUI.InterleavedVBO;
+import GLUIRes.TextureManager;
+import GLUIRes.VBOManager;
 
 public class Batcher {
 
@@ -23,7 +23,7 @@ public class Batcher {
 	}
 
 	public void batch(Drawable d) {
-		if (d.texture == null)
+		if (d == null)
 			return;
 		if (!textureTable.containsKey(d.texture))
 			textureTable.put(d.texture, new LinkedList<Drawable>());
@@ -35,7 +35,7 @@ public class Batcher {
 		for (Texture texture : textureTable.keySet()) {
 			long init = System.nanoTime();
 			LinkedList<Drawable> batch = textureTable.get(texture);
-			VBOManager.createDynamicVBO(name, type, interleaved);
+			VBOManager.createDynamicVBO(name + texture.name, type, interleaved);
 			TextureManager.useTexture(texture);
 			init = System.nanoTime() - init;
 
@@ -44,7 +44,7 @@ public class Batcher {
 			get = System.nanoTime() - get;
 
 			long draw = System.nanoTime();
-			VBOManager.dynamicDraw(name, data);
+			VBOManager.dynamicDraw(name + texture.name, data);
 			draw = System.nanoTime() - draw;
 
 			long textureBatchTime = init + get + draw;
@@ -56,7 +56,7 @@ public class Batcher {
 				Debug.profile("Initializing Texture Batch Data", init, 2, Debug.rendererMessage);
 			}
 			if (Debug.profile[Debug.verboseTexturePass])
-				Debug.profile("Rendering Texture Batch: " + texture, textureBatchTime, 1, Debug.rendererMessage);
+				Debug.profile("Rendering Texture Batch: " + texture.name, textureBatchTime, 1, Debug.rendererMessage);
 		}
 		if (Debug.profile[Debug.verboseTexturePass])
 			Debug.profile("Batch Rendered: " + name, batchTime, 0, Debug.rendererMessage);

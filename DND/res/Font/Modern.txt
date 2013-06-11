@@ -1,0 +1,90 @@
+//This file encodes Font definitions for use in embedding into a FNT file.
+//All Tokens must be in the form 
+//key : value
+//No whitespace allowed before the key or after the value.
+
+//This is a comment.
+
+//Mandatory Definitions are:
+//Width: Set the width of each letter.
+//Height:Set the height of each letter.
+
+//TileWidth: Set the number of tiles to subdivide the image into horizontally. All Definitions after this declaration will use this width.
+//TileHeight: Set the number of tiles to subdivide the image into Vertically. All Definitions after this declaration will use this width.
+
+TileWidth: 12
+TileHeight: 8
+Width: 12
+Height: 16
+ :-7
+!:-6
+":-3
+#:-2
+$:-2
+%:-3
+':-6
+(:-5
+):-4
+*:-3
++:-3
+,:-6
+-:-5
+.:-6
+/:-3
+::-7
+;:-7
+<:-5
+>:-5
+?:-3
+[:-6
+]:-5
+\:-5
+^:-5
+`:-5
+=:-1
+{:-4
+}:-4
+|:-5
+~:-3
+0:-4
+1:-4
+2:-4
+3:-4
+4:-3
+5:-4
+6:-4
+7:-4
+8:-4
+9:-4
+C:-2
+F:-1
+I:-4
+J:-2
+S:-3
+T:-2
+Z:-1
+a:-4
+b:-3
+c:-4
+d:-3
+e:-4
+f:-5
+g:-4
+h:-3
+i:-6
+j:-5
+k:-1
+l:-6
+m:1
+n:-2
+o:-4
+p:-3
+q:-4
+r:-3
+s:-5
+t:-5
+u:-2
+v:-3
+x:-3
+y:-4
+z:-4

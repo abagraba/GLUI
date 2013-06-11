@@ -13,7 +13,7 @@ import static org.lwjgl.opengl.GL12.GL_TEXTURE_3D;
 
 import java.io.File;
 
-import GLUICore.Debug;
+import GLUI.Debug;
 
 public class Texture {
 
@@ -115,7 +115,7 @@ public class Texture {
 	 * @return texture coordinates of bounding rectangle.
 	 */
 	public URect getTile(int i) {
-		return URect.rect().translate((i + offset) % w, (i + offset) / w).scale(1.0f / w, 1.0f / h);
+		return URect.trect().translate((i + offset) % w, (i + offset) / w).scale(1.0f / w, 1.0f / h);
 	}
 
 	public int getGLType() {

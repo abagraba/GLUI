@@ -6,13 +6,10 @@ import java.util.Collection;
 import java.util.Hashtable;
 import java.util.LinkedList;
 
-import org.lwjgl.opengl.GL11;
-
-import GLUICore.Debug;
-import GLUICore.RenderContainer;
-import GLUICore.TextureManager;
-import GLUICore.VBOManager;
+import GLUI.Debug;
+import GLUI.RenderContainer;
 import GLUIRenderer.URect;
+import GLUIRes.VBOManager;
 
 public class TSR extends RenderContainer {
 
@@ -23,7 +20,7 @@ public class TSR extends RenderContainer {
 
 	private final Hashtable<String, Dimension> textures = new Hashtable<String, Dimension>();
 	private final Hashtable<String, TilesetGroup> tilesets = new Hashtable<String, TilesetGroup>();
-	
+
 	public TSR() {
 		PropertyReader tilesetData = new PropertyReader(new File(root + "TileSetData.pro"));
 		root += tilesetData.getProperty("Tileset") + "/";
@@ -45,7 +42,8 @@ public class TSR extends RenderContainer {
 				if (!batches.containsKey(group.texture))
 					batches.put(group.texture, new LinkedList<T>());
 				batches.get(group.texture).add(tile);
-			} else
+			}
+			else
 				Debug.log("Error rendering tile. Group " + tile.group + " not found.");
 		}
 
@@ -59,17 +57,17 @@ public class TSR extends RenderContainer {
 		for (T tile : batch) {
 			TilesetGroup group = groupData(tile.group);
 
-			fillBuffer(URect.rect().translate(tile.x, tile.y).scale(resolution, resolution), f, 16 * i);
+			fillBuffer(URect.vrect().translate(tile.x, tile.y).scale(resolution, resolution), f, 16 * i);
 
 			int texX = (tile.texID + group.offset) % textureDimensions(group.texture).width;
 			int texY = (tile.texID + group.offset) / textureDimensions(group.texture).width;
 			float texWidth = 1.0f / textureDimensions(group.texture).width;
 			float texHeight = 1.0f / textureDimensions(group.texture).height;
-			fillBuffer(URect.rect().translate(texX, texY).scale(texWidth, texHeight), f, 16 * i + 2);
+			fillBuffer(URect.trect().translate(texX, texY).scale(texWidth, texHeight), f, 16 * i + 2);
 			i++;
 		}
-		TextureManager.useTexture(texture, GL11.GL_TEXTURE_2D, GL11.GL_NEAREST);
-		VBOManager.createDynamicVBO(texture, GL11.GL_QUADS, VBOManager.V2T2);
+		// TextureManager.useTexture(texture, GL11.GL_TEXTURE_2D, GL11.GL_NEAREST);
+		// VBOManager.createDynamicVBO(texture, GL11.GL_QUADS, VBOManager.V2T2);
 		VBOManager.dynamicDraw(texture, f);
 
 	}

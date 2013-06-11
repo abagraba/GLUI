@@ -11,7 +11,11 @@ public final class URect {
 		this.y2 = y2;
 	}
 
-	public static URect rect() {
+	public static URect vrect() {
+		return new URect(0, 1, 1, 0);
+	}
+
+	public static URect trect() {
 		return new URect(0, 0, 1, 1);
 	}
 

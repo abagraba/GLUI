@@ -2,9 +2,11 @@ package GLUIUtil;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.LinkedList;
+import java.util.HashMap;
 
 import GLUIRenderer.Texture;
+import GLUIRes.Font;
+import GLUIRes.ResourceManager;
 
 /**
  * A TEXExtractor extracts a LinkedList of Texture definitions embedded in a TEX file. A TEX file consists of a PNG file
@@ -27,22 +29,23 @@ import GLUIRenderer.Texture;
  * </code>
  * </pre>
  */
-public final class TEXExtractor {
+public final class FNTExtractor {
 
 	private static final byte[] signature = new byte[] {-119, 80, 78, 71, 13, 10, 26, 10};
 
-	private TEXExtractor() {
+	private FNTExtractor() {
 
 	}
 
 	/**
-	 * Returns a list of Texture definitions stored in the provided TEX file.
-	 * @param file TEX file containing definitions.
-	 * @return Texture definitions. returns null if file is invalid.
+	 * Returns the Font definition stored in the provided FNT file.
+	 * @param file FNT file containing definitions.
+	 * @return Font definition. returns null if file is invalid.
 	 */
-	public static LinkedList<Texture> readPTEX(File file) {
-		if (!FileUtil.isType(file, "tex"))
+	public static Font readFONT(File file) {
+		if (!FileUtil.isType(file, "fnt"))
 			return null;
+		String name = file.getName().split("\\.")[0];
 		Reader r = new Reader(file);
 		try {
 			checkSignature(r.readBytes(8));
@@ -50,25 +53,25 @@ public final class TEXExtractor {
 		catch (IOException e) {
 			return null;
 		}
-		if (findPTEX(r))
-			return parsePTEX(r, file.getPath());
+		if (findFONT(r))
+			return parseFONT(r, name, file.getPath());
 		return null;
 	}
 
 	private static void checkSignature(byte[] b) {
 		for (int i = 0; i < 8; i++)
 			if (b[i] != signature[i])
-				throw new IllegalArgumentException("Not actually a TEX file");
+				throw new IllegalArgumentException("Not actually a FNT file");
 	}
 
-	private static boolean findPTEX(Reader r) {
+	private static boolean findFONT(Reader r) {
 		String id = null;
 		try {
 			while (!"IEND".equals(id)) {
 				int size;
 				size = r.readInt();
 				id = r.readString(4);
-				if ("ptEx".equals(id))
+				if ("foNt".equals(id))
 					return true;
 				// Skip chunk data
 				r.skipBytes(size);
@@ -82,29 +85,28 @@ public final class TEXExtractor {
 		return false;
 	}
 
-	private static LinkedList<Texture> parsePTEX(Reader r, String filename) {
-		LinkedList<Texture> textures = new LinkedList<Texture>();
+	private static Font parseFONT(Reader r, String name, String filename) {
+		HashMap<Byte, Integer> kerning = new HashMap<Byte, Integer>();
+		int tw = 1;
+		int th = 1;
 		int w = 1;
 		int h = 1;
-		byte typeData = Texture.TEXTURE_2D | Texture.NEAREST;
-		int size;
 		try {
-			while ((size = r.readInt()) != -1)
-				if (size == -2) {
-					w = r.readInt();
-					h = r.readInt();
-				}
-				else if (size == -3)
-					typeData = r.readByte();
-				else {
-					String name = r.readString(size);
-					int offset = r.readInt();
-					textures.add(new Texture(name, filename, w, h, offset, typeData));
-				}
+			byte b;
+			while ((b = r.readByte()) != -1) {
+				int kern = r.readInt();
+				kerning.put(b, kern);
+			}
+			tw = r.readInt();
+			th = r.readInt();
+			w = r.readInt();
+			h = r.readInt();
 		}
 		catch (IOException eofe) {
 			return null;
 		}
-		return textures;
+		ResourceManager.addTexture(new Texture("FONT: " + name, filename, tw, th, 0,
+				(byte) (Texture.TEXTURE_2D | Texture.NEAREST)));
+		return new Font(name, ResourceManager.getTexture("FONT: " + name), w, h, kerning);
 	}
 }

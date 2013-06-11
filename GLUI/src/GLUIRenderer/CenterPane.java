@@ -1,7 +1,7 @@
 package GLUIRenderer;
 
-import GLUICore.RenderContainer;
-import GLUICore.Renderable;
+import GLUI.RenderContainer;
+import GLUI.Renderable;
 
 public class CenterPane extends RenderContainer {
 
@@ -22,11 +22,17 @@ public class CenterPane extends RenderContainer {
 	}
 
 	@Override
-	public void validatePosition() {
+	public void validateContents() {
 		if (current != null) {
 			current.resize(width, height);
 			current.reposition((width - current.getWidth()) / 2, (height - current.getHeight()) / 2);
 		}
+	}
+
+	@Override
+	public void render() {
+		// TODO Auto-generated method stub
+
 	}
 
 }

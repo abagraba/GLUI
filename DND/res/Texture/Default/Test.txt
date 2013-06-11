@@ -1,3 +1,19 @@
+//This file encodes Texture definitions for use in embedding into a TEX file.
+//All Tokens must be in the form 
+//key : value
+//No whitespace allowed before the key or after the value.
+
+//This is a comment.
+
+//Allowable Definitions are:
+//Width: Set the number of tiles to subdivide the texture into horizontally. All Definitions after this declaration will use this width.
+//Height: Set the number of tiles to subdivide the texture into Vertically. All Definitions after this declaration will use this width.
+//Type: Set the target of the texture. Valid values are 1D, 2D, 3D, 1DARRAY, 2DARRAY, CUBE, CUBEARRAY.
+//Filter: Set the filter of the texture. Valid values are NEAREST, LINEAR, NEAREST NEAREST, NEAREST LINEAR, LINEAR NEAREST, LINEAR LINEAR.
+
+//Any other definitions are considered texture definitions of the form 
+//TextureName : tileOffset
+
 Width: 2
 Height: 2
 Base: 0

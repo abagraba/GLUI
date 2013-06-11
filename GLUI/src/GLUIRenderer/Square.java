@@ -6,8 +6,12 @@ public class Square extends Drawable {
 		super(texture);
 	}
 
-	public URect vertices = URect.rect();
-	public URect texes = URect.rect();
+	public Square(Texture texture) {
+		super(texture);
+	}
+
+	public URect vertices = URect.vrect();
+	public URect texes = URect.trect();
 
 	public void translate(int x, int y) {
 		vertices.translate(x, y);

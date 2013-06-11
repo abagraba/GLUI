@@ -2,6 +2,11 @@ package Core;
 
 public class Equipment extends Item implements AbilityMod, ACMod, SkillMod {
 
+	public Equipment(float price, float weight) {
+		super(price, weight);
+		// TODO Auto-generated constructor stub
+	}
+
 	public final int[] abilityMod = new int[Ability.values().length];
 	public final int[] skillMod = new int[Skill.values().length];
 	public final int[] acMod = new int[AC.values().length];

@@ -6,6 +6,8 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.LinkedList;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Tokenizer takes a text file and splits each line into a Token. Each Token is represented by two Strings separated by
@@ -47,18 +49,16 @@ public class Tokenizer {
 	private static Token tokenize(String line, String delimiter) {
 		if (line.equals(""))
 			return null;
-		if (line.matches("!.*"))
+		if (line.matches("\\s*//.*"))
 			return null;
-		if (line.matches("//.*"))
-			return null;
-		if (line.matches(".+\\s*" + delimiter + "\\s*.+")) {
-			String[] parts = line.split("\\s*" + delimiter + "\\s*", 2);
-			if (parts[0].equals(""))
-				return null;
-			if (parts[1].equals(""))
-				return null;
-			return new Token(parts[0], parts[1]);
-		}
+		return getToken(line, delimiter);
+	}
+
+	private static Token getToken(String line, String delimiter) {
+		Pattern p = Pattern.compile("\\s*(.+?)\\s*" + delimiter + "\\s*(.+)\\s*");
+		Matcher m = p.matcher(line);
+		if (m.find())
+			return new Token(m.group(1), m.group(2));
 		return null;
 	}
 

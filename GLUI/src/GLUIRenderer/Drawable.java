@@ -2,8 +2,8 @@ package GLUIRenderer;
 
 import org.lwjgl.opengl.GL11;
 
-import GLUICore.InterleavedVBO;
-import GLUICore.ResourceManager;
+import GLUI.InterleavedVBO;
+import GLUIRes.ResourceManager;
 
 public abstract class Drawable {
 
@@ -25,13 +25,27 @@ public abstract class Drawable {
 		this(InterleavedVBO.V2T2, texture);
 	}
 
+	public Drawable(int renderType, InterleavedVBO interleaved, Texture texture) {
+		this.renderType = renderType;
+		this.interleaved = interleaved;
+		this.texture = texture;
+	}
+
+	public Drawable(InterleavedVBO interleaved, Texture texture) {
+		this(GL11.GL_QUADS, interleaved, texture);
+	}
+
+	public Drawable(Texture texture) {
+		this(InterleavedVBO.V2T2, texture);
+	}
+
 	public abstract int numVertices();
 
 	public abstract float[] vertexData();
 
 	public void bufferData(float[] data, int offset) {
 		float[] vert = vertexData();
-		for (int i = 0; i < vert.length; i++)
+		for (int i = 0; i < numVertices(); i++)
 			data[offset + i] = vert[i];
 	}
 
