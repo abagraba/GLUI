@@ -1,4 +1,4 @@
-package Rendering;
+package Managers;
 
 import static Util.GLCONST.*;
 

@@ -1,8 +1,8 @@
-package Rendering;
+package Managers;
 
 import static org.lwjgl.opengl.GL11.*;
 
-public enum VBOInterleave {
+public enum Interleaving {
 
 	V2(2, 0, 0, 0),
 	V3(3, 0, 0, 0),
@@ -41,7 +41,7 @@ public enum VBOInterleave {
 	public final int N;
 	public final int length;
 
-	private VBOInterleave(int V, int C, int T, int N) {
+	private Interleaving(int V, int C, int T, int N) {
 		this.V = V;
 		this.C = C;
 		this.T = T;

@@ -11,21 +11,21 @@ import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.DisplayMode;
 import org.lwjgl.opengl.GL11;
 
+import Managers.IndexData;
+import Managers.Interleaving;
 import Managers.ShaderManager;
 import Managers.Texture;
 import Managers.TextureManager;
+import Managers.VertexData;
 import Rendering.Instance;
 import Rendering.InstantiableStaticEntity;
 import Rendering.RenderQueue;
-import Rendering.VBOIndexData;
-import Rendering.VBOInterleave;
-import Rendering.VBOVertexData;
 import Util.Quaternionf;
 import Util.Vectorf3;
 
 public class Testing {
 
-	public static int d = 100;
+	public static int d = 10;
 	public static float sx = 1.5f;
 	public static float sy = 1.5f;
 	public static float wh = 1;
@@ -56,15 +56,14 @@ public class Testing {
 	public static void main(String[] args) {
 		initDisplay();
 
-		VBOVertexData vertex = new VBOVertexData("Testing", VBOInterleave.V2T2);
-		VBOVertexData color = new VBOVertexData("Testingc", VBOInterleave.C3);
-
-		VBOVertexData[] vd = new VBOVertexData[] {vertex, color};
+		VertexData[] vd = new VertexData[] {new VertexData("Testing", Interleaving.V2T2),
+											new VertexData("Testingc", Interleaving.C3)};
 		vd[0].bufferData(new float[] {-0.5f, -0.5f, 0, 1, 0.5f, -0.5f, 1, 1, 0.5f, 0.5f, 1, 0, -0.5f, 0.5f, 0, 0, 0, 0,
 										0.5f, 0.5f});
 		vd[1].bufferData(getData(1, 0, 0));
 
-		VBOIndexData id = new VBOIndexData("OddQuad", new int[] {4, 0, 1, 2, 3, 0});
+		IndexData id = new IndexData("OddQuad");
+		id.bufferData(new int[] {4, 0, 1, 2, 3, 0});
 
 		InstantiableStaticEntity ie = new InstantiableStaticEntity(vd, id, GL11.GL_TRIANGLE_FAN);
 		LinkedList<Instance> instances = new LinkedList<Instance>();
@@ -75,16 +74,15 @@ public class Testing {
 		TextureManager.useTexture("Test");
 		RenderQueue def = new RenderQueue("Default");
 
-		Quaternionf rot = Quaternionf.fromAxisAngle(new Vectorf3(0, 0, 1), (float) (Math.PI * 0.01));
 		def.addToQueue(ie);
-		int co = 0;
+		int color = 0;
 		while (!Display.isCloseRequested()) {
 			GL11.glClear(GL11.GL_COLOR_BUFFER_BIT);
-			float[] c = toRGB(co++);
+			float[] c = toRGB(color++);
 			vd[1].bufferData(getData(c[0], c[1], c[2]));
-			if (co % 1 == 0)
+			if (color % 1 == 0)
 				for (Instance instance : instances)
-					instance.rotateBy(rot);
+					instance.rotateBy(Quaternionf.fromAxisAngle(new Vectorf3(0, 0, 1), (float) (Math.PI * 0.01)));
 			def.render();
 			Display.update();
 			Display.sync(60);
