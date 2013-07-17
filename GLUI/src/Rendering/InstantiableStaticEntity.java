@@ -1,36 +1,33 @@
 package Rendering;
 
-import static Util.GLCONST.ARRAY_BUFFER;
-import static Util.GLCONST.DYNAMIC;
-import static Util.GLCONST.FLOAT;
-
 import java.nio.FloatBuffer;
 import java.util.LinkedList;
 
 import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GL20;
 import org.lwjgl.opengl.GL31;
-import org.lwjgl.opengl.GL33;
 
 import Managers.ShaderManager;
-import Util.Debug;
 import Util.Quaternionf;
 import Util.Vectorf3;
 
 public class InstantiableStaticEntity extends Renderable implements DestructionListener {
+
+	boolean test = false;
 
 	public final LinkedList<Instance> active = new LinkedList<Instance>();
 	public final LinkedList<Instance> inactive = new LinkedList<Instance>();
 
 	private final VBOVertexData[] vertexData;
 	private final VBOIndexData indexData;
+	private final InstanceData[] instanceData;
 	private final int primitive;
 	private FloatBuffer transformData = BufferUtils.createFloatBuffer(0);
 
-	public InstantiableStaticEntity(VBOVertexData[] vertexData, VBOIndexData indexData, int type) {
+	public InstantiableStaticEntity(VBOVertexData[] vertexData, VBOIndexData indexData, InstanceData[] instanceData, int type) {
 		this.vertexData = vertexData;
 		this.indexData = indexData;
+		this.instanceData = instanceData;
 		primitive = type;
 	}
 
@@ -57,31 +54,7 @@ public class InstantiableStaticEntity extends Renderable implements DestructionL
 
 	protected void drawInstances() {
 		ShaderManager.instanceProgram.use();
-		String transformVBO = toString();
-
 		enableState();
-		VBO transformData = VBOManager.getVBO(transformVBO);
-		if (transformData == null)
-			transformData = VBOManager.createVBO(transformVBO, FLOAT);
-		if (transformData == null) {
-			Debug.log(Debug.INSTANCE_MANAGEMENT, "Failure to allocate transform buffer.");
-			disableState();
-			return;
-		}
-		// TODO cache these calls to save time. Update cache whenever instanceProgram changes.
-		int pos = ShaderManager.instanceProgram.getAttribute("position");
-		int rot = ShaderManager.instanceProgram.getAttribute("rotation");
-		int sca = ShaderManager.instanceProgram.getAttribute("scale");
-		transformData.bufferData(ARRAY_BUFFER, getTransformData(), DYNAMIC);
-		GL20.glVertexAttribPointer(pos, 3, GL11.GL_FLOAT, false, 40, 0);
-		GL20.glVertexAttribPointer(rot, 4, GL11.GL_FLOAT, false, 40, 12);
-		GL20.glVertexAttribPointer(sca, 3, GL11.GL_FLOAT, false, 40, 28);
-		GL20.glEnableVertexAttribArray(pos);
-		GL20.glEnableVertexAttribArray(rot);
-		GL20.glEnableVertexAttribArray(sca);
-		GL33.glVertexAttribDivisor(pos, 1);
-		GL33.glVertexAttribDivisor(rot, 1);
-		GL33.glVertexAttribDivisor(sca, 1);
 		GL31.glDrawElementsInstanced(primitive, indexData.getSize(), GL11.GL_UNSIGNED_INT, 0, active.size());
 		disableState();
 	}
@@ -90,6 +63,8 @@ public class InstantiableStaticEntity extends Renderable implements DestructionL
 		for (VBOVertexData vertexDatum : vertexData)
 			vertexDatum.enableBuffer();
 		indexData.enableBuffer();
+		for (InstanceData instanceDatum : instanceData)
+			instanceDatum.enableBuffer();
 	}
 
 	private void disableState() {
@@ -98,7 +73,7 @@ public class InstantiableStaticEntity extends Renderable implements DestructionL
 			vertexDatum.disableBuffer();
 	}
 
-	private FloatBuffer getTransformData() {
+	public FloatBuffer getRPSData() {
 		boolean newArray = false;
 		if (transformData.capacity() < active.size() * 10) {
 			transformData = BufferUtils.createFloatBuffer(active.size() * 10);

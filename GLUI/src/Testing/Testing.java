@@ -14,6 +14,8 @@ import Managers.ShaderManager;
 import Managers.Texture;
 import Managers.TextureManager;
 import Rendering.Instance;
+import Rendering.InstanceData;
+import Rendering.InstanceInterleave;
 import Rendering.InstantiableStaticEntity;
 import Rendering.RenderQueue;
 import Rendering.VBOIndexData;
@@ -59,12 +61,13 @@ public class Testing {
 																		0, -0.5f, 0.5f, 0, 0, 0, 0, 0.5f, 0.5f},
 				VBOInterleave.V2T2);
 		VBOVertexData col = new VBOVertexData("Testingc", VBOInterleave.C3);
+		InstanceData inst = new InstanceData("Testingi", InstanceInterleave.PRS);
 
 		col.bufferData(getData(new float[] {1, 0, 0}));
 		VBOIndexData id = new VBOIndexData("OddQuadIndex", new int[] {4, 0, 1, 2, 3, 0});
 
 		InstantiableStaticEntity cat = new InstantiableStaticEntity(new VBOVertexData[] {vert, col}, id,
-				GL11.GL_TRIANGLE_FAN);
+				new InstanceData[] {inst}, GL11.GL_TRIANGLE_FAN);
 		for (int x = 0; x < d * wh; x++)
 			for (int y = 0; y < d; y++)
 				cat.createInstance(new Vectorf3(x * sx, y * sy, 0), Quaternionf.fromAxisAngle(Vectorf3.zAxis(), (x + y) % 4
@@ -80,6 +83,7 @@ public class Testing {
 				for (Instance instance : cat.active)
 					instance.rotateBy(Quaternionf.fromAxisAngle(new Vectorf3(0, 0, 1), (float) (Math.PI * 0.01)));
 			col.bufferData(getData(toRGB(color++)));
+			inst.bufferData(cat.getRPSData());
 			queue.render();
 			Display.update();
 			Display.sync(60);

@@ -7,6 +7,10 @@ import static org.lwjgl.opengl.GL11.glClear;
 import static org.lwjgl.opengl.GL11.glClearColor;
 import static org.lwjgl.opengl.GL11.glGetError;
 
+import java.awt.event.KeyEvent;
+import java.awt.event.MouseEvent;
+import java.beans.EventHandler;
+
 import org.lwjgl.LWJGLException;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
@@ -14,9 +18,10 @@ import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.DisplayMode;
 import org.lwjgl.util.glu.GLU;
 
-import GLres.ShaderManager;
-import GLres.TextureManager;
-import GLres.VBOManager;
+import Managers.ShaderManager;
+import Managers.TextureManager;
+import Rendering.VBOManager;
+import Util.Debug;
 
 public abstract class Window extends EventHandler {
 

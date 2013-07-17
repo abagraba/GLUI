@@ -3,6 +3,10 @@ package Rendering;
 import static Util.GLCONST.DYNAMIC;
 import static Util.GLCONST.ELEMENT_ARRAY_BUFFER;
 import static Util.GLCONST.INT;
+
+import java.nio.IntBuffer;
+
+import Util.Debug;
 import Util.GLCONST;
 
 public class VBOIndexData {
@@ -34,9 +38,12 @@ public class VBOIndexData {
 	 */
 	public VBOIndexData(String name) {
 		VBO vbo = VBOManager.getVBO(name);
-		if (vbo == null)
-			vbo = VBOManager.createVBO(name, INT);
-		this.vbo = vbo;
+		if (vbo != null) {
+			Debug.log(Debug.VBO_MANAGER, "Failure to create dynamic index data buffer. Name collision: [", name, "].");
+			this.vbo = null;
+			return;
+		}
+		this.vbo = VBOManager.createVBO(name, INT);
 	}
 
 	/**
@@ -46,12 +53,16 @@ public class VBOIndexData {
 	 */
 	public VBOIndexData(String name, int[] data) {
 		VBO vbo = VBOManager.getVBO(name);
-		if (vbo == null)
-			vbo = VBOManager.createStaticVBO(name, data, GLCONST.ELEMENT_ARRAY_BUFFER);
 		size = data.length;
-		this.vbo = vbo;
+		if (vbo != null) {
+			Debug.log(Debug.VBO_MANAGER, "Failure to create static index data buffer. Name collision: [", name, "].");
+			this.vbo = null;
+			return;
+		}
+		this.vbo = VBOManager.createStaticVBO(name, data, GLCONST.ELEMENT_ARRAY_BUFFER);
 	}
 
+	// FIXME typecheck
 	/**
 	 * Specifies an empty int VBO to be used as the index buffer.
 	 * @param vbo an empty int VBO.
@@ -63,6 +74,12 @@ public class VBOIndexData {
 	public void bufferData(int[] data) {
 		vbo.bufferData(ELEMENT_ARRAY_BUFFER, data, DYNAMIC);
 		size = data.length;
+		VBOManager.unbindVBO(ELEMENT_ARRAY_BUFFER);
+	}
+
+	public void bufferData(IntBuffer data) {
+		vbo.bufferData(ELEMENT_ARRAY_BUFFER, data, DYNAMIC);
+		size = data.limit();
 		VBOManager.unbindVBO(ELEMENT_ARRAY_BUFFER);
 	}
 

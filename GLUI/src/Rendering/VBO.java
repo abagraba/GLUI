@@ -4,6 +4,7 @@ import static Util.GLCONST.BYTE;
 import static Util.GLCONST.FLOAT;
 import static Util.GLCONST.INT;
 
+import java.nio.ByteBuffer;
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
 
@@ -32,7 +33,8 @@ public class VBO {
 	}
 
 	/**
-	 * Buffers data into the VBO.
+	 * Buffers data into the VBO. Has overhead due to conversion to ByteBuffer. If possible use
+	 * {@link #bufferData(int, ByteBuffer, int)}.
 	 * @param target binding target for the VBO.
 	 * @param data byte data to be buffered into the VBO.
 	 * @param hint usage hint. Accepts {@link Util.GLCONST#STATIC}, {@link Util.GLCONST#DYNAMIC}.
@@ -53,6 +55,26 @@ public class VBO {
 	/**
 	 * Buffers data into the VBO.
 	 * @param target binding target for the VBO.
+	 * @param data byte data to be buffered into the VBO.
+	 * @param hint usage hint. Accepts {@link Util.GLCONST#STATIC}, {@link Util.GLCONST#DYNAMIC}.
+	 * @return this VBO if data successfully buffered. null otherwise.
+	 */
+	public VBO bufferData(int target, ByteBuffer data, int hint) {
+		if (!VBOManager.isVBOBound(this, target))
+			VBOManager.bindVBO(this, target);
+		if (!isType(BYTE)) {
+			Debug.log(Debug.VBO_MANAGER, "VBO buffering failed. Data is of type byte while [", name, "] is of type ",
+					typeName(dataType), ".");
+			return null;
+		}
+		GL15.glBufferData(target, data, hint);
+		return this;
+	}
+
+	/**
+	 * Buffers data into the VBO. Has overhead due to conversion to IntBuffer. If possible use
+	 * {@link #bufferData(int, IntBuffer, int)}.
+	 * @param target binding target for the VBO.
 	 * @param data int data to be buffered into the VBO.
 	 * @param hint usage hint. Accepts {@link Util.GLCONST#STATIC}, {@link Util.GLCONST#DYNAMIC}.
 	 * @return this VBO if data successfully buffered. null otherwise.
@@ -71,6 +93,26 @@ public class VBO {
 
 	/**
 	 * Buffers data into the VBO.
+	 * @param target binding target for the VBO.
+	 * @param data int data to be buffered into the VBO.
+	 * @param hint usage hint. Accepts {@link Util.GLCONST#STATIC}, {@link Util.GLCONST#DYNAMIC}.
+	 * @return this VBO if data successfully buffered. null otherwise.
+	 */
+	public VBO bufferData(int target, IntBuffer data, int hint) {
+		if (!VBOManager.isVBOBound(this, target))
+			VBOManager.bindVBO(this, target);
+		if (!isType(INT)) {
+			Debug.log(Debug.VBO_MANAGER, "VBO buffering failed. Data is of type int while [", name, "] is of type ",
+					typeName(dataType), ".");
+			return null;
+		}
+		GL15.glBufferData(target, data, hint);
+		return this;
+	}
+
+	/**
+	 * Buffers data into the VBO. Has overhead due to conversion to FloatBuffer. If possible use
+	 * {@link #bufferData(int, FloatBuffer, int)}.
 	 * @param target binding target for the VBO.
 	 * @param data float data to be buffered into the VBO.
 	 * @param hint usage hint. Accepts {@link Util.GLCONST#STATIC}, {@link Util.GLCONST#DYNAMIC}.
