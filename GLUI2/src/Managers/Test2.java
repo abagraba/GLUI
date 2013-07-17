@@ -6,6 +6,7 @@ import org.lwjgl.opengl.GL11;
 import org.lwjgl.util.glu.GLU;
 
 import Rendering.VBOIndexData;
+import Rendering.VBOInterleave;
 import Rendering.VBOVertexData;
 
 public class Test2 {
@@ -46,7 +47,7 @@ public class Test2 {
 				data[i * 20 + 19] = 1;
 			}
 
-		VBOVertexData vd = new VBOVertexData("TestVertices", Interleaving.V2C3);
+		VBOVertexData vd = new VBOVertexData("TestVertices", VBOInterleave.V2C3);
 		vd.bufferData(data);
 		VBOIndexData id = new VBOIndexData(0, d * d * 4);
 		System.out.println(GLU.gluErrorString(GL11.glGetError()));
@@ -57,11 +58,11 @@ public class Test2 {
 			System.out.println((System.nanoTime() - t) * .000001f + "ms");
 
 			long tt = System.nanoTime();
-			vd.preDraw();
-			id.enableData();
+			vd.enableBuffer();
+			id.enableBuffer();
 			GL11.glDrawElements(GL11.GL_QUADS, d * d * 4, GL11.GL_UNSIGNED_INT, 0);
-			id.disableData();
-			vd.postDraw();
+			id.disableBuffer();
+			vd.disableBuffer();
 			System.out.println((System.nanoTime() - tt) * .000001f);
 			Display.update();
 

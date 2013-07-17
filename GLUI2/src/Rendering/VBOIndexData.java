@@ -48,6 +48,7 @@ public class VBOIndexData {
 		VBO vbo = VBOManager.getVBO(name);
 		if (vbo == null)
 			vbo = VBOManager.createStaticVBO(name, data, GLCONST.ELEMENT_ARRAY_BUFFER);
+		size = data.length;
 		this.vbo = vbo;
 	}
 
@@ -65,11 +66,11 @@ public class VBOIndexData {
 		VBOManager.unbindVBO(ELEMENT_ARRAY_BUFFER);
 	}
 
-	public void enableData() {
+	public void enableBuffer() {
 		VBOManager.bindVBO(vbo, ELEMENT_ARRAY_BUFFER);
 	}
 
-	public static void disableData() {
+	public static void disableBuffer() {
 		VBOManager.unbindVBO(ELEMENT_ARRAY_BUFFER);
 	}
 

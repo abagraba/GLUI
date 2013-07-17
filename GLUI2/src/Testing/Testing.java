@@ -4,21 +4,20 @@ import static Util.GLCONST.SHADER_FRAG;
 import static Util.GLCONST.SHADER_VERT;
 
 import java.io.File;
-import java.util.LinkedList;
 
 import org.lwjgl.LWJGLException;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.DisplayMode;
 import org.lwjgl.opengl.GL11;
 
-import Managers.Interleaving;
 import Managers.ShaderManager;
 import Managers.Texture;
 import Managers.TextureManager;
-import Rendering.VBOIndexData;
 import Rendering.Instance;
 import Rendering.InstantiableStaticEntity;
 import Rendering.RenderQueue;
+import Rendering.VBOIndexData;
+import Rendering.VBOInterleave;
 import Rendering.VBOVertexData;
 import Util.Quaternionf;
 import Util.Vectorf3;
@@ -56,44 +55,39 @@ public class Testing {
 	public static void main(String[] args) {
 		initDisplay();
 
-		VBOVertexData[] vd = new VBOVertexData[] {new VBOVertexData("Testing", Interleaving.V2T2),
-											new VBOVertexData("Testingc", Interleaving.C3)};
-		vd[0].bufferData(new float[] {-0.5f, -0.5f, 0, 1, 0.5f, -0.5f, 1, 1, 0.5f, 0.5f, 1, 0, -0.5f, 0.5f, 0, 0, 0, 0,
-										0.5f, 0.5f});
-		vd[1].bufferData(getData(1, 0, 0));
+		VBOVertexData vert = new VBOVertexData("Testing", new float[] {-0.5f, -0.5f, 0, 1, 0.5f, -0.5f, 1, 1, 0.5f, 0.5f, 1,
+																		0, -0.5f, 0.5f, 0, 0, 0, 0, 0.5f, 0.5f},
+				VBOInterleave.V2T2);
+		VBOVertexData col = new VBOVertexData("Testingc", VBOInterleave.C3);
 
-		VBOIndexData id = new VBOIndexData("OddQuad");
-		id.bufferData(new int[] {4, 0, 1, 2, 3, 0});
+		col.bufferData(getData(new float[] {1, 0, 0}));
+		VBOIndexData id = new VBOIndexData("OddQuadIndex", new int[] {4, 0, 1, 2, 3, 0});
 
-		InstantiableStaticEntity ie = new InstantiableStaticEntity(vd, id, GL11.GL_TRIANGLE_FAN);
-		LinkedList<Instance> instances = new LinkedList<Instance>();
+		InstantiableStaticEntity cat = new InstantiableStaticEntity(new VBOVertexData[] {vert, col}, id,
+				GL11.GL_TRIANGLE_FAN);
 		for (int x = 0; x < d * wh; x++)
 			for (int y = 0; y < d; y++)
-				instances.add(ie.createInstance(new Vectorf3(x * sx, y * sy, 0), Quaternionf.fromAxisAngle(Vectorf3.zAxis(),
-						(x + y) % 4 * (float) (Math.PI / 2)), new Vectorf3(1.5f, 1, 1)));
+				cat.createInstance(new Vectorf3(x * sx, y * sy, 0), Quaternionf.fromAxisAngle(Vectorf3.zAxis(), (x + y) % 4
+						* (float) (Math.PI / 2)), new Vectorf3(1.5f, 1, 1));
 		TextureManager.useTexture("Test");
-		RenderQueue def = new RenderQueue("Default");
+		RenderQueue queue = new RenderQueue("Main");
 
-		def.addToQueue(ie);
+		queue.addToQueue(cat);
 		int color = 0;
 		while (!Display.isCloseRequested()) {
 			GL11.glClear(GL11.GL_COLOR_BUFFER_BIT);
-			float[] c = toRGB(color++);
-			vd[1].bufferData(getData(c[0], c[1], c[2]));
 			if (color % 1 == 0)
-				for (Instance instance : instances)
+				for (Instance instance : cat.active)
 					instance.rotateBy(Quaternionf.fromAxisAngle(new Vectorf3(0, 0, 1), (float) (Math.PI * 0.01)));
-			def.render();
+			col.bufferData(getData(toRGB(color++)));
+			queue.render();
 			Display.update();
 			Display.sync(60);
 		}
 	}
 
-	public static float[] getData(float r, float g, float b) {
-		// return new float[] {-0.5f, -0.5f, 0, 0, 0, 0.5f, -0.5f, r, g, b, 0.5f, 0.5f, 0, 0, 0, -0.5f, 0.5f, r, g, b,
-		// 0, 0, 1,
-		// 1, 1};
-		return new float[] {r, g, b, 0, 0, 0, r, g, b, 0, 0, 0, 1, 1, 1};
+	public static float[] getData(float[] c) {
+		return new float[] {c[0], c[1], c[2], 0, 0, 0, c[0], c[1], c[2], 0, 0, 0, 1, 1, 1};
 	}
 
 	// h = [0, 360]

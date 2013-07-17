@@ -20,8 +20,8 @@ import Util.Vectorf3;
 
 public class InstantiableStaticEntity extends Renderable implements DestructionListener {
 
-	private final LinkedList<Instance> active = new LinkedList<Instance>();
-	private final LinkedList<Instance> inactive = new LinkedList<Instance>();
+	public final LinkedList<Instance> active = new LinkedList<Instance>();
+	public final LinkedList<Instance> inactive = new LinkedList<Instance>();
 
 	private final VBOVertexData[] vertexData;
 	private final VBOIndexData indexData;
@@ -57,18 +57,15 @@ public class InstantiableStaticEntity extends Renderable implements DestructionL
 
 	protected void drawInstances() {
 		ShaderManager.instanceProgram.use();
-		for (VBOVertexData vertexDatum : vertexData)
-			vertexDatum.preDraw();
-		indexData.enableData();
 		String transformVBO = toString();
+
+		enableState();
 		VBO transformData = VBOManager.getVBO(transformVBO);
 		if (transformData == null)
 			transformData = VBOManager.createVBO(transformVBO, FLOAT);
 		if (transformData == null) {
 			Debug.log(Debug.INSTANCE_MANAGEMENT, "Failure to allocate transform buffer.");
-			indexData.disableData();
-			for (VBOVertexData vertexDatum : vertexData)
-				vertexDatum.postDraw();
+			disableState();
 			return;
 		}
 		// TODO cache these calls to save time. Update cache whenever instanceProgram changes.
@@ -86,9 +83,19 @@ public class InstantiableStaticEntity extends Renderable implements DestructionL
 		GL33.glVertexAttribDivisor(rot, 1);
 		GL33.glVertexAttribDivisor(sca, 1);
 		GL31.glDrawElementsInstanced(primitive, indexData.getSize(), GL11.GL_UNSIGNED_INT, 0, active.size());
-		indexData.disableData();
+		disableState();
+	}
+
+	private void enableState() {
 		for (VBOVertexData vertexDatum : vertexData)
-			vertexDatum.postDraw();
+			vertexDatum.enableBuffer();
+		indexData.enableBuffer();
+	}
+
+	private void disableState() {
+		VBOIndexData.disableBuffer();
+		for (VBOVertexData vertexDatum : vertexData)
+			vertexDatum.disableBuffer();
 	}
 
 	private FloatBuffer getTransformData() {
