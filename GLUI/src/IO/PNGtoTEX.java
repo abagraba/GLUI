@@ -55,7 +55,7 @@ public class PNGtoTEX {
 					dimensionChanged = true;
 				}
 				else if (token.key.equalsIgnoreCase("Type")) {
-					typeData = (byte) (typeData & Texture.filterMask | Texture.getType(token.value));
+					typeData = (byte) (typeData & Texture.filterMask | Texture.getTarget(token.value));
 					typeChanged = true;
 				}
 				else if (token.key.equalsIgnoreCase("Filter")) {
