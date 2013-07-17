@@ -5,6 +5,10 @@ import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.util.glu.GLU;
 
+import Rendering.VBOIndexData;
+import Rendering.VBOInterleave;
+import Rendering.VBOVertexData;
+
 public class Test2 {
 
 	public static void main(String[] args) {
@@ -43,9 +47,9 @@ public class Test2 {
 				data[i * 20 + 19] = 1;
 			}
 
-		VertexData vd = new VertexData("TestVertices", Interleaving.V2C3);
+		VBOVertexData vd = new VBOVertexData("TestVertices", VBOInterleave.V2C3);
 		vd.bufferData(data);
-		IndexData id = new IndexData(0, d * d * 4);
+		VBOIndexData id = new VBOIndexData(0, d * d * 4);
 		System.out.println(GLU.gluErrorString(GL11.glGetError()));
 
 		while (!Display.isCloseRequested()) {
