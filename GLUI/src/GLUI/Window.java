@@ -1,4 +1,4 @@
-package GLUI;
+package GLui;
 
 import static org.lwjgl.opengl.GL11.GL_COLOR_BUFFER_BIT;
 import static org.lwjgl.opengl.GL11.GL_DEPTH_BUFFER_BIT;
@@ -7,8 +7,6 @@ import static org.lwjgl.opengl.GL11.glClear;
 import static org.lwjgl.opengl.GL11.glClearColor;
 import static org.lwjgl.opengl.GL11.glGetError;
 
-import java.io.File;
-
 import org.lwjgl.LWJGLException;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
@@ -16,10 +14,9 @@ import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.DisplayMode;
 import org.lwjgl.util.glu.GLU;
 
-import GLUIRes.ResourceManager;
-import GLUIRes.ShaderManager;
-import GLUIRes.TextureManager;
-import GLUIRes.VBOManager;
+import GLres.ShaderManager;
+import GLres.TextureManager;
+import GLres.VBOManager;
 
 public abstract class Window extends EventHandler {
 
@@ -52,9 +49,6 @@ public abstract class Window extends EventHandler {
 
 		glInit();
 		glClearColor(0f, 0f, 0f, 1);
-
-		ResourceManager.setRoot(new File("../DND/res"));
-		ResourceManager.setTextureRoot("/Texture");
 
 	}
 

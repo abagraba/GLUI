@@ -1,4 +1,4 @@
-package GLUI;
+package GLui;
 
 /**
  * Event class. Defines the core components of an Event.
@@ -16,7 +16,7 @@ public class Event {
 	}
 
 	/**
-	 * Consume the event. Consumed events should thrown a {@link GLUI.Event.ConsumedException} if accessed after
+	 * Consume the event. Consumed events should thrown a {@link GLui.Event.ConsumedException} if accessed after
 	 * consumption.
 	 */
 	public void consume() {
@@ -24,7 +24,7 @@ public class Event {
 	}
 
 	/**
-	 * Runtime Exception thrown when there is an invalid access to a consumed {@link GLUI.Event}.
+	 * Runtime Exception thrown when there is an invalid access to a consumed {@link GLui.Event}.
 	 */
 	public static final class ConsumedException extends RuntimeException {
 

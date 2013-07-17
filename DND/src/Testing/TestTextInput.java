@@ -5,12 +5,12 @@ import java.util.LinkedList;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.GL11;
 
-import GLUI.InterleavedVBO;
-import GLUI.KeyEvent;
-import GLUI.Renderable;
-import GLUIRenderer.Batcher;
-import GLUIRes.Font;
-import GLUIRes.ResourceManager;
+import GLcomponent.Batcher;
+import GLres.Font;
+import GLres.ResourceManager;
+import GLui.InterleavedVBO;
+import GLui.KeyEvent;
+import GLui.Renderable;
 
 public class TestTextInput extends Renderable {
 

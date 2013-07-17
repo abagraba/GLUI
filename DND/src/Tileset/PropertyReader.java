@@ -9,7 +9,7 @@ import java.io.IOException;
 import java.util.Collection;
 import java.util.Hashtable;
 
-import GLUI.Debug;
+import GLui.Debug;
 
 /**
  * Creates a HashTable of properties defined in the supplied .pro file.

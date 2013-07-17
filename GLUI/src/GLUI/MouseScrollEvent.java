@@ -1,6 +1,6 @@
-package GLUI;
+package GLui;
 
-import GLUI.Event;
+import GLui.Event;
 
 public class MouseScrollEvent extends Event {
 

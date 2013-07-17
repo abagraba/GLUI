@@ -1,10 +1,10 @@
-package GLUI;
+package GLui;
 
 import java.awt.Dimension;
 
 import org.lwjgl.opengl.GL11;
 
-import GLUI.Event.ConsumedException;
+import GLui.Event.ConsumedException;
 
 public abstract class Renderable extends EventHandler {
 
@@ -40,7 +40,7 @@ public abstract class Renderable extends EventHandler {
 	}
 
 	/**
-	 * Repositions the Renderable relative to its {@link GLUI.RenderContainer}.
+	 * Repositions the Renderable relative to its {@link GLui.RenderContainer}.
 	 * @param x new x Position.
 	 * @param y new y Position.
 	 */
@@ -93,8 +93,8 @@ public abstract class Renderable extends EventHandler {
 
 	/**
 	 * Overridable method intended for implementations to use to ensure validity of position. If invalid, the position
-	 * and dimensions should be assigned valid values using {@link GLUI.RenderContainer#reposition(int, int)} and
-	 * {@link GLUI.RenderContainer#resize(int, int)}. If overriding an already defined implementation, include a call to
+	 * and dimensions should be assigned valid values using {@link GLui.RenderContainer#reposition(int, int)} and
+	 * {@link GLui.RenderContainer#resize(int, int)}. If overriding an already defined implementation, include a call to
 	 * super.render() first.
 	 */
 	public abstract void validateContents();

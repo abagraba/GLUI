@@ -1,16 +1,13 @@
 package Testing;
 
-import java.util.LinkedList;
-
 import org.lwjgl.input.Keyboard;
 
-import GLUI.KeyEvent;
-import GLUIRenderer.CenterPane;
-import GLUIRenderer.FixedSplitPane;
+import GLcomponent.CenterPane;
+import GLcomponent.FixedSplitPane;
+import GLui.KeyEvent;
 
 public class TestContentPane extends CenterPane {
 
-	LinkedList<Byte> baos = new LinkedList<Byte>();
 	TestTextInput txt = new TestTextInput();
 	boolean shift = false;
 

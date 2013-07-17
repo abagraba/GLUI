@@ -1,4 +1,4 @@
-package GLUI;
+package GLui;
 
 public class EventHandler {
 	

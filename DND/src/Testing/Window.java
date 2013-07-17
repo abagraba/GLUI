@@ -8,7 +8,7 @@ import static org.lwjgl.opengl.GL11.glBlendFunc;
 import static org.lwjgl.opengl.GL11.glClearColor;
 import static org.lwjgl.opengl.GL11.glEnable;
 
-public class Window extends GLUI.Window {
+public class Window extends GLui.Window {
 
 	public Window(int w, int h) {
 		super(w, h);
@@ -17,7 +17,7 @@ public class Window extends GLUI.Window {
 		glClearColor(0f, 0f, 0f, 1);
 
 		repack();
-		GLUI.Window.profileInfo = false;
+		GLui.Window.profileInfo = false;
 
 		render();
 	}

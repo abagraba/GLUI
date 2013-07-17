@@ -22,9 +22,9 @@ import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.DisplayMode;
 import org.lwjgl.util.glu.GLU;
 
-import GLUIRes.ShaderManager;
-import GLUIRes.TextureManager;
-import GLUIRes.VBOManager;
+import GLres.ShaderManager;
+import GLres.TextureManager;
+import GLres.VBOManager;
 
 public class TestDisplay {
 

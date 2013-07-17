@@ -2,10 +2,10 @@ package Testing;
 
 import org.lwjgl.opengl.GL11;
 
-import GLUI.InterleavedVBO;
-import GLUIRenderer.Batcher;
-import GLUIRenderer.FixedSplitPane;
-import GLUIRenderer.GridMap;
+import GLcomponent.Batcher;
+import GLcomponent.FixedSplitPane;
+import GLcomponent.GridMap;
+import GLui.InterleavedVBO;
 
 public class TestSplitPane extends FixedSplitPane {
 

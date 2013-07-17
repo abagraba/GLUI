@@ -1,4 +1,4 @@
-package GLUI;
+package GLui;
 
 
 public class MouseEvent extends Event{

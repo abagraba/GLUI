@@ -1,4 +1,4 @@
-package GLUI;
+package GLui;
 
 import java.util.LinkedList;
 

@@ -1,4 +1,4 @@
-package GLUI;
+package GLui;
 
 /**
  * A KeyEvent defines a Keyboard Event. It contains information on which key triggered the Event and whether the key was

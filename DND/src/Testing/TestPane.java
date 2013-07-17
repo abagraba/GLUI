@@ -2,12 +2,12 @@ package Testing;
 
 import org.lwjgl.opengl.GL11;
 
-import GLUI.InterleavedVBO;
-import GLUI.KeyEvent;
-import GLUI.RenderContainer;
-import GLUI.Renderable;
-import GLUIRenderer.Batcher;
-import GLUIRenderer.GridMap;
+import GLcomponent.Batcher;
+import GLcomponent.GridMap;
+import GLui.InterleavedVBO;
+import GLui.KeyEvent;
+import GLui.RenderContainer;
+import GLui.Renderable;
 
 public class TestPane extends RenderContainer {
 

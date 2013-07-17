@@ -1,4 +1,4 @@
-package GLUI;
+package GLui;
 
 import static org.lwjgl.opengl.GL11.GL_COLOR_ARRAY;
 import static org.lwjgl.opengl.GL11.GL_FLOAT;

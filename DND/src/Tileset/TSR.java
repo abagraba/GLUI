@@ -6,10 +6,10 @@ import java.util.Collection;
 import java.util.Hashtable;
 import java.util.LinkedList;
 
-import GLUI.Debug;
-import GLUI.RenderContainer;
-import GLUIRenderer.URect;
-import GLUIRes.VBOManager;
+import GLcomponent.URect;
+import GLres.VBOManager;
+import GLui.Debug;
+import GLui.RenderContainer;
 
 public class TSR extends RenderContainer {
 
@@ -133,6 +133,18 @@ public class TSR extends RenderContainer {
 				}
 			}
 		}
+	}
+
+	@Override
+	public void render() {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void validateContents() {
+		// TODO Auto-generated method stub
+
 	}
 
 }
