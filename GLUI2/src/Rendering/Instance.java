@@ -14,6 +14,7 @@ public final class Instance {
 	public Quaternionf rotation;
 	public Vectorf3 scale;
 	protected boolean modified = true;
+	protected final float[] values = new float[10];
 	private final LinkedList<DestructionListener> listeners = new LinkedList<DestructionListener>();
 
 	protected Instance() {}
@@ -26,6 +27,7 @@ public final class Instance {
 	 */
 	public void translateBy(float x, float y, float z) {
 		position.add(x, y, z);
+		updatePosition();
 		modified = true;
 	}
 
@@ -44,6 +46,7 @@ public final class Instance {
 	 */
 	public void setPosition(float x, float y, float z) {
 		position = new Vectorf3(x, y, z);
+		updatePosition();
 		modified = true;
 	}
 
@@ -60,6 +63,7 @@ public final class Instance {
 	 */
 	public void rotateBy(Quaternionf quaternion) {
 		rotation.rotateBy(quaternion);
+		updateRotation();
 		modified = true;
 	}
 
@@ -69,6 +73,8 @@ public final class Instance {
 	 */
 	public void setRotation(Quaternionf quaternion) {
 		rotation = quaternion;
+		updateRotation();
+		modified = true;
 	}
 
 	/**
@@ -110,7 +116,30 @@ public final class Instance {
 		this.rotation = rotation;
 		this.scale = scale;
 		listeners.clear();
+		updatePosition();
+		updateRotation();
+		updateScale();
+		modified = true;
 		return this;
+	}
+
+	private void updatePosition() {
+		values[0] = position.x;
+		values[1] = position.y;
+		values[2] = position.z;
+	}
+
+	private void updateRotation() {
+		values[3] = rotation.x;
+		values[4] = rotation.y;
+		values[5] = rotation.z;
+		values[6] = rotation.w;
+	}
+
+	private void updateScale() {
+		values[7] = scale.x;
+		values[8] = scale.y;
+		values[9] = scale.z;
 	}
 
 }

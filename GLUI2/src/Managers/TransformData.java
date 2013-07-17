@@ -6,6 +6,9 @@ import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL20;
 import org.lwjgl.opengl.GL33;
 
+import Rendering.VBO;
+import Rendering.VBOManager;
+
 public class TransformData {
 	private final VBO vbo;
 

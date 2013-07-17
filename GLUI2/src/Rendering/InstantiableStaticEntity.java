@@ -4,18 +4,16 @@ import static Util.GLCONST.ARRAY_BUFFER;
 import static Util.GLCONST.DYNAMIC;
 import static Util.GLCONST.FLOAT;
 
+import java.nio.FloatBuffer;
 import java.util.LinkedList;
 
+import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL20;
 import org.lwjgl.opengl.GL31;
 import org.lwjgl.opengl.GL33;
 
-import Managers.IndexData;
 import Managers.ShaderManager;
-import Managers.VBO;
-import Managers.VBOManager;
-import Managers.VertexData;
 import Util.Debug;
 import Util.Quaternionf;
 import Util.Vectorf3;
@@ -25,12 +23,12 @@ public class InstantiableStaticEntity extends Renderable implements DestructionL
 	private final LinkedList<Instance> active = new LinkedList<Instance>();
 	private final LinkedList<Instance> inactive = new LinkedList<Instance>();
 
-	private final VertexData[] vertexData;
-	private final IndexData indexData;
+	private final VBOVertexData[] vertexData;
+	private final VBOIndexData indexData;
 	private final int primitive;
-	private float[] transformData = new float[0];
+	private FloatBuffer transformData = BufferUtils.createFloatBuffer(0);
 
-	public InstantiableStaticEntity(VertexData[] vertexData, IndexData indexData, int type) {
+	public InstantiableStaticEntity(VBOVertexData[] vertexData, VBOIndexData indexData, int type) {
 		this.vertexData = vertexData;
 		this.indexData = indexData;
 		primitive = type;
@@ -59,7 +57,7 @@ public class InstantiableStaticEntity extends Renderable implements DestructionL
 
 	protected void drawInstances() {
 		ShaderManager.instanceProgram.use();
-		for (VertexData vertexDatum : vertexData)
+		for (VBOVertexData vertexDatum : vertexData)
 			vertexDatum.preDraw();
 		indexData.enableData();
 		String transformVBO = toString();
@@ -69,7 +67,7 @@ public class InstantiableStaticEntity extends Renderable implements DestructionL
 		if (transformData == null) {
 			Debug.log(Debug.INSTANCE_MANAGEMENT, "Failure to allocate transform buffer.");
 			indexData.disableData();
-			for (VertexData vertexDatum : vertexData)
+			for (VBOVertexData vertexDatum : vertexData)
 				vertexDatum.postDraw();
 			return;
 		}
@@ -87,34 +85,31 @@ public class InstantiableStaticEntity extends Renderable implements DestructionL
 		GL33.glVertexAttribDivisor(pos, 1);
 		GL33.glVertexAttribDivisor(rot, 1);
 		GL33.glVertexAttribDivisor(sca, 1);
-		GL31.glDrawElementsInstanced(primitive, indexData.size, GL11.GL_UNSIGNED_INT, 0, active.size());
+		GL31.glDrawElementsInstanced(primitive, indexData.getSize(), GL11.GL_UNSIGNED_INT, 0, active.size());
 		indexData.disableData();
-		for (VertexData vertexDatum : vertexData)
+		for (VBOVertexData vertexDatum : vertexData)
 			vertexDatum.postDraw();
 	}
 
-	private float[] getTransformData() {
+	private FloatBuffer getTransformData() {
 		boolean newArray = false;
-		if (transformData.length < active.size() * 10) {
-			transformData = new float[active.size() * 10];
+		if (transformData.capacity() < active.size() * 10) {
+			transformData = BufferUtils.createFloatBuffer(active.size() * 10);
 			newArray = true;
 		}
 		int i = 0;
+		boolean needReposition = false;
 		for (Instance instance : active) {
 			if (newArray || instance.modified) {
-				transformData[i * 10] = instance.position.x;
-				transformData[i * 10 + 1] = instance.position.y;
-				transformData[i * 10 + 2] = instance.position.z;
-				transformData[i * 10 + 3] = instance.rotation.x;
-				transformData[i * 10 + 4] = instance.rotation.y;
-				transformData[i * 10 + 5] = instance.rotation.z;
-				transformData[i * 10 + 6] = instance.rotation.w;
-				transformData[i * 10 + 7] = instance.scale.x;
-				transformData[i * 10 + 8] = instance.scale.y;
-				transformData[i * 10 + 9] = instance.scale.z;
+				if (needReposition)
+					transformData.position(i * 10);
+				transformData.put(instance.values);
 			}
+			else
+				needReposition = true;
 			i++;
 		}
+		transformData.flip();
 		return transformData;
 	}
 

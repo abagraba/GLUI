@@ -11,15 +11,15 @@ import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.DisplayMode;
 import org.lwjgl.opengl.GL11;
 
-import Managers.IndexData;
 import Managers.Interleaving;
 import Managers.ShaderManager;
 import Managers.Texture;
 import Managers.TextureManager;
-import Managers.VertexData;
+import Rendering.VBOIndexData;
 import Rendering.Instance;
 import Rendering.InstantiableStaticEntity;
 import Rendering.RenderQueue;
+import Rendering.VBOVertexData;
 import Util.Quaternionf;
 import Util.Vectorf3;
 
@@ -56,13 +56,13 @@ public class Testing {
 	public static void main(String[] args) {
 		initDisplay();
 
-		VertexData[] vd = new VertexData[] {new VertexData("Testing", Interleaving.V2T2),
-											new VertexData("Testingc", Interleaving.C3)};
+		VBOVertexData[] vd = new VBOVertexData[] {new VBOVertexData("Testing", Interleaving.V2T2),
+											new VBOVertexData("Testingc", Interleaving.C3)};
 		vd[0].bufferData(new float[] {-0.5f, -0.5f, 0, 1, 0.5f, -0.5f, 1, 1, 0.5f, 0.5f, 1, 0, -0.5f, 0.5f, 0, 0, 0, 0,
 										0.5f, 0.5f});
 		vd[1].bufferData(getData(1, 0, 0));
 
-		IndexData id = new IndexData("OddQuad");
+		VBOIndexData id = new VBOIndexData("OddQuad");
 		id.bufferData(new int[] {4, 0, 1, 2, 3, 0});
 
 		InstantiableStaticEntity ie = new InstantiableStaticEntity(vd, id, GL11.GL_TRIANGLE_FAN);

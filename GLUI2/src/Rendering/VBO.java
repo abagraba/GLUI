@@ -1,7 +1,10 @@
-package Managers;
+package Rendering;
 
-import static Util.GLCONST.*;
+import static Util.GLCONST.BYTE;
+import static Util.GLCONST.FLOAT;
+import static Util.GLCONST.INT;
 
+import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
 
 import org.lwjgl.opengl.GL15;
@@ -82,6 +85,25 @@ public class VBO {
 			return null;
 		}
 		GL15.glBufferData(target, BufferUtil.asDirectFloatBuffer(data), hint);
+		return this;
+	}
+
+	/**
+	 * Buffers data into the VBO.
+	 * @param target binding target for the VBO.
+	 * @param data float data to be buffered into the VBO.
+	 * @param hint usage hint. Accepts {@link Util.GLCONST#STATIC}, {@link Util.GLCONST#DYNAMIC}.
+	 * @return this VBO if data successfully buffered. null otherwise.
+	 */
+	public VBO bufferData(int target, FloatBuffer data, int hint) {
+		if (!VBOManager.isVBOBound(this, target))
+			VBOManager.bindVBO(this, target);
+		if (!isType(FLOAT)) {
+			Debug.log(Debug.VBO_MANAGER, "VBO buffering failed. Data is of type float while [", name, "] is of type ",
+					typeName(dataType), ".");
+			return null;
+		}
+		GL15.glBufferData(target, data, hint);
 		return this;
 	}
 
