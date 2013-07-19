@@ -5,9 +5,8 @@ import java.util.LinkedList;
 import Util.Quaternionf;
 import Util.Vectorf3;
 
-public class InstanceFactory implements DestructionListener {
+public class InstanceFactory {
 
-	private static InstanceFactory factory = new InstanceFactory();
 	private static LinkedList<Instance> available = new LinkedList<Instance>();
 
 	private InstanceFactory() {}
@@ -22,8 +21,6 @@ public class InstanceFactory implements DestructionListener {
 	public static Instance newInstance(InstantiableStaticEntity entity, Vectorf3 position, Quaternionf rotation,
 			Vectorf3 scale) {
 		Instance instance = getInstance().set(entity, position, rotation, scale);
-		instance.addDestructionListener(factory);
-		instance.addDestructionListener(entity);
 		instance.activate();
 		return instance;
 	}
@@ -43,8 +40,7 @@ public class InstanceFactory implements DestructionListener {
 		return available.removeFirst();
 	}
 
-	@Override
-	public void instanceDestroyed(Instance instance) {
+	protected static void instanceDestroyed(Instance instance) {
 		available.add(instance);
 	}
 

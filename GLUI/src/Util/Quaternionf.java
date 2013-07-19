@@ -47,6 +47,10 @@ public class Quaternionf {
 		w *= isqrt;
 	}
 
+	public float[] toArray() {
+		return new float[] {x, y, z, w};
+	}
+
 	/**
 	 * Returns the identity Quaternion.
 	 * @return the identity Quaternion.

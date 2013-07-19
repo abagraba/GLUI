@@ -4,7 +4,9 @@ import static Util.GLCONST.SHADER_FRAG;
 import static Util.GLCONST.SHADER_VERT;
 
 import java.io.File;
+import java.nio.FloatBuffer;
 
+import org.lwjgl.BufferUtils;
 import org.lwjgl.LWJGLException;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.DisplayMode;
@@ -26,7 +28,7 @@ import Util.Vectorf3;
 
 public class Testing {
 
-	public static int d = 10;
+	public static int d = 500;
 	public static float sx = 1.5f;
 	public static float sy = 1.5f;
 	public static float wh = 1;
@@ -61,17 +63,28 @@ public class Testing {
 																		0, -0.5f, 0.5f, 0, 0, 0, 0, 0.5f, 0.5f},
 				VBOInterleave.V2T2);
 		VBOVertexData col = new VBOVertexData("Testingc", VBOInterleave.C3);
-		InstanceData inst = new InstanceData("Testingi", InstanceInterleave.PRS);
+		int numInstances = 0;
+		InstanceData inst = new InstanceData("Testingp", InstanceInterleave.R);
+		InstanceData posScale = new InstanceData("Testingps", InstanceInterleave.PS);
 
 		col.bufferData(getData(new float[] {1, 0, 0}));
 		VBOIndexData id = new VBOIndexData("OddQuadIndex", new int[] {4, 0, 1, 2, 3, 0});
 
 		InstantiableStaticEntity cat = new InstantiableStaticEntity(new VBOVertexData[] {vert, col}, id,
-				new InstanceData[] {inst}, GL11.GL_TRIANGLE_FAN);
+				new InstanceData[] {inst, posScale}, GL11.GL_TRIANGLE_FAN);
 		for (int x = 0; x < d * wh; x++)
 			for (int y = 0; y < d; y++)
 				cat.createInstance(new Vectorf3(x * sx, y * sy, 0), Quaternionf.fromAxisAngle(Vectorf3.zAxis(), (x + y) % 4
 						* (float) (Math.PI / 2)), new Vectorf3(1.5f, 1, 1));
+
+		FloatBuffer data = BufferUtils.createFloatBuffer(cat.active.size() * 10);
+		for (Instance instance : cat.active) {
+			data.put(instance.getPositionArray());
+			data.put(instance.getScaleArray());
+		}
+		data.flip();
+		posScale.bufferData(data);
+
 		TextureManager.useTexture("Test");
 		RenderQueue queue = new RenderQueue("Main");
 
@@ -79,11 +92,24 @@ public class Testing {
 		int color = 0;
 		while (!Display.isCloseRequested()) {
 			GL11.glClear(GL11.GL_COLOR_BUFFER_BIT);
-			if (color % 1 == 0)
-				for (Instance instance : cat.active)
-					instance.rotateBy(Quaternionf.fromAxisAngle(new Vectorf3(0, 0, 1), (float) (Math.PI * 0.01)));
+			Quaternionf rotationa = Quaternionf.fromAxisAngle(new Vectorf3(0, 0, 1), (float) (Math.PI * 0.01));
+			Quaternionf rotationb = Quaternionf.fromAxisAngle(new Vectorf3(0, 0, 1), -(float) (Math.PI * 0.01));
+			int x = 0;
+			int z = 0;
+			for (Instance instance : cat.active) {
+				instance.rotateBy(z % 2 == 0 ? rotationa : rotationb);
+				if (x == d) {
+					x = 0;
+					z++;
+				}
+				x++;
+			}
 			col.bufferData(getData(toRGB(color++)));
-			inst.bufferData(cat.getRPSData());
+			data = BufferUtils.createFloatBuffer(cat.active.size() * 10);
+			for (Instance instance : cat.active)
+				data.put(instance.getRotationArray());
+			data.flip();
+			inst.bufferData(data);
 			queue.render();
 			Display.update();
 			Display.sync(60);

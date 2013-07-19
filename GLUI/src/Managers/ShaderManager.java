@@ -45,23 +45,24 @@ public class ShaderManager {
 	 * @param name Name of the program. Used for future accesses to the program.
 	 * @param shaders Shaders to be used in this program.
 	 */
-	public static void createProgram(String name, Shader... shaders) {
+	public static Program createProgram(String name, Shader... shaders) {
 		Program p = Program.createProgram(name, shaders);
 		if (p != null)
 			programs.put(name, p);
+		return p;
 	}
 
-	public static void createProgram(String name, String... shaders) {
+	public static Program createProgram(String name, String... shaders) {
 		Shader[] shades = new Shader[shaders.length];
 		for (int i = 0; i < shaders.length; i++) {
 			shades[i] = getShader(shaders[i]);
 			if (shades[i] == null) {
 				Debug.log(Debug.SHADER_MANAGER, "Cannot create program [", name, "]. Shader [", shaders[i],
 						"] does not exist.");
-				return;
+				return null;
 			}
 		}
-		createProgram(name, shades);
+		return createProgram(name, shades);
 	}
 
 	/**

@@ -11,7 +11,7 @@ import Managers.ShaderManager;
 import Util.Quaternionf;
 import Util.Vectorf3;
 
-public class InstantiableStaticEntity extends Renderable implements DestructionListener {
+public class InstantiableStaticEntity extends Renderable {
 
 	boolean test = false;
 
@@ -85,7 +85,9 @@ public class InstantiableStaticEntity extends Renderable implements DestructionL
 			if (newArray || instance.modified) {
 				if (needReposition)
 					transformData.position(i * 10);
-				transformData.put(instance.values);
+				transformData.put(instance.getPositionArray());
+				transformData.put(instance.getRotationArray());
+				transformData.put(instance.getScaleArray());
 			}
 			else
 				needReposition = true;
@@ -109,8 +111,7 @@ public class InstantiableStaticEntity extends Renderable implements DestructionL
 		drawInstances();
 	}
 
-	@Override
-	public void instanceDestroyed(Instance instance) {
+	protected void instanceDestroyed(Instance instance) {
 		removeFromActive(instance);
 		inactive.remove(instance);
 	}
