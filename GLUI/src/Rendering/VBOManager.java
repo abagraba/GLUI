@@ -30,9 +30,9 @@ public class VBOManager {
 			Debug.log(Debug.VBO_MANAGER, "Vertex Buffer for [", name, "] could not be allocated.");
 			return null;
 		}
-		VBO vbo = new VBO(name, buffer, BYTE);
+		VBO vbo = new VBO(name, buffer, TYPE_UBYTE);
 		mapVBO(name, vbo);
-		return vbo.bufferData(glTarget[target], data, STATIC);
+		return vbo.bufferData(glTarget[target], data, VBO_STATIC);
 	}
 
 	/**
@@ -48,9 +48,9 @@ public class VBOManager {
 			Debug.log(Debug.VBO_MANAGER, "Vertex Buffer for [", name, "] could not be allocated.");
 			return null;
 		}
-		VBO vbo = new VBO(name, buffer, INT);
+		VBO vbo = new VBO(name, buffer, TYPE_UINT);
 		mapVBO(name, vbo);
-		return vbo.bufferData(target, data, STATIC);
+		return vbo.bufferData(target, data, VBO_STATIC);
 	}
 
 	/**
@@ -66,9 +66,9 @@ public class VBOManager {
 			Debug.log(Debug.VBO_MANAGER, "Vertex Buffer for [", name, "] could not be allocated.");
 			return null;
 		}
-		VBO vbo = new VBO(name, buffer, FLOAT);
+		VBO vbo = new VBO(name, buffer, TYPE_FLOAT);
 		mapVBO(name, vbo);
-		return vbo.bufferData(target, data, STATIC);
+		return vbo.bufferData(target, data, VBO_STATIC);
 	}
 
 	/**
@@ -115,7 +115,7 @@ public class VBOManager {
 	/**
 	 * Binds VBO associated with vboName to target. No-op is already bound.
 	 * @param vboName VBO to be bound. Unbinds VBOs if null.
-	 * @param target takes {@link Util.GLCONST#ARRAY_BUFFER}, {@link Util.GLCONST#ELEMENT_ARRAY_BUFFER}.
+	 * @param target takes {@link Util.GLCONST#VBO_ARRAY_BUFFER}, {@link Util.GLCONST#VBO_ELEMENT_ARRAY_BUFFER}.
 	 */
 	public static void bindVBO(String vboName, int target) {
 		bindVBO(getVBO(vboName), target);
@@ -124,7 +124,7 @@ public class VBOManager {
 	/**
 	 * Binds VBO to the target. Should only be used if not using VBOMANAGER management. No-op if already bound.
 	 * @param vbo VBO to be bound. Unbinds VBOs if null.
-	 * @param target takes {@link Util.GLCONST#ARRAY_BUFFER}, {@link Util.GLCONST#ELEMENT_ARRAY_BUFFER}.
+	 * @param target takes {@link Util.GLCONST#VBO_ARRAY_BUFFER}, {@link Util.GLCONST#VBO_ELEMENT_ARRAY_BUFFER}.
 	 */
 	public static void bindVBO(VBO vbo, int target) {
 		if (vbo == null)
@@ -136,7 +136,7 @@ public class VBOManager {
 
 	/**
 	 * Unbind VBO from the target if any are bound. No-op if nothing is bound.
-	 * @param target takes {@link Util.GLCONST#ARRAY_BUFFER}, {@link Util.GLCONST#ELEMENT_ARRAY_BUFFER}.
+	 * @param target takes {@link Util.GLCONST#VBO_ARRAY_BUFFER}, {@link Util.GLCONST#VBO_ELEMENT_ARRAY_BUFFER}.
 	 */
 	public static void unbindVBO(int target) {
 		if (boundBuffers[targetIndex(target)] == null)
@@ -157,9 +157,9 @@ public class VBOManager {
 
 	private static int targetIndex(int target) {
 		switch (target) {
-			case ARRAY_BUFFER:
+			case VBO_ARRAY_BUFFER:
 				return 0;
-			case ELEMENT_ARRAY_BUFFER:
+			case VBO_ELEMENT_ARRAY_BUFFER:
 				return 1;
 			default:
 				return -1;

@@ -1,8 +1,8 @@
 package Rendering;
 
-import static Util.GLCONST.ARRAY_BUFFER;
-import static Util.GLCONST.DYNAMIC;
-import static Util.GLCONST.FLOAT;
+import static Util.GLCONST.VBO_ARRAY_BUFFER;
+import static Util.GLCONST.VBO_DYNAMIC;
+import static Util.GLCONST.TYPE_FLOAT;
 
 import java.nio.FloatBuffer;
 
@@ -15,7 +15,7 @@ public class VBOVertexData {
 	private final VBOInterleave interleaving;
 
 	/**
-	 * Creates an float VBO with the STATIC hint for use with vertex data. Buffers the provided data.
+	 * Creates an float VBO with the DYNAMIC hint for use with vertex data. Buffers the provided data.
 	 * @param name name to be associated with the resulting vertex buffer.
 	 * @param interleaving {@link VBOInterleave} that describes the layout of interleaved data.
 	 */
@@ -27,7 +27,7 @@ public class VBOVertexData {
 			this.vbo = null;
 			return;
 		}
-		this.vbo = VBOManager.createVBO(name, FLOAT);
+		this.vbo = VBOManager.createVBO(name, TYPE_FLOAT);
 	}
 
 	/**
@@ -44,7 +44,7 @@ public class VBOVertexData {
 			this.vbo = null;
 			return;
 		}
-		this.vbo = VBOManager.createStaticVBO(name, data, GLCONST.ARRAY_BUFFER);
+		this.vbo = VBOManager.createStaticVBO(name, data, GLCONST.VBO_ARRAY_BUFFER);
 	}
 
 	public VBOVertexData(VBO vbo, VBOInterleave interleaving) {
@@ -53,23 +53,23 @@ public class VBOVertexData {
 	}
 
 	public void bufferData(float[] data) {
-		vbo.bufferData(ARRAY_BUFFER, data, DYNAMIC);
-		VBOManager.unbindVBO(ARRAY_BUFFER);
+		vbo.bufferData(VBO_ARRAY_BUFFER, data, VBO_DYNAMIC);
+		VBOManager.unbindVBO(VBO_ARRAY_BUFFER);
 	}
 
 	public void bufferData(FloatBuffer data) {
-		vbo.bufferData(ARRAY_BUFFER, data, DYNAMIC);
-		VBOManager.unbindVBO(ARRAY_BUFFER);
+		vbo.bufferData(VBO_ARRAY_BUFFER, data, VBO_DYNAMIC);
+		VBOManager.unbindVBO(VBO_ARRAY_BUFFER);
 	}
 
 	public void enableBuffer() {
-		VBOManager.bindVBO(vbo, ARRAY_BUFFER);
+		VBOManager.bindVBO(vbo, VBO_ARRAY_BUFFER);
 		interleaving.enableStates();
 	}
 
 	public void disableBuffer() {
 		interleaving.disableStates();
-		VBOManager.unbindVBO(ARRAY_BUFFER);
+		VBOManager.unbindVBO(VBO_ARRAY_BUFFER);
 	}
 
 	@Override

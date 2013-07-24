@@ -2,8 +2,6 @@ package Rendering;
 
 import java.util.LinkedList;
 
-import org.lwjgl.util.vector.Vector3f;
-
 import Util.Quaternionf;
 import Util.Vectorf3;
 
@@ -32,7 +30,7 @@ public final class Instance {
 	/**
 	 * @see #translateBy(float, float, float)
 	 */
-	public void translateBy(Vector3f translation) {
+	public void translateBy(Vectorf3 translation) {
 		translateBy(translation.x, translation.y, translation.z);
 	}
 
@@ -50,7 +48,7 @@ public final class Instance {
 	/**
 	 * @see #setPosition(float, float, float)
 	 */
-	public void setPosition(Vector3f position) {
+	public void setPosition(Vectorf3 position) {
 		setPosition(position.x, position.y, position.z);
 	}
 

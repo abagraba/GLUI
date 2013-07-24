@@ -4,8 +4,6 @@ import java.io.File;
 import java.io.IOException;
 import java.util.LinkedList;
 
-import GLui.Debug;
-
 public class PNGReader {
 
 	private static final byte[] signature = new byte[] {-119, 80, 78, 71, 13, 10, 26, 10};
@@ -55,7 +53,7 @@ public class PNGReader {
 			return !id.equals("IEND");
 		}
 		catch (IOException e) {
-			Debug.log("PNGReader IOException.");
+			Util.Debug.log("PNGReader IOException.");
 			return false;
 		}
 	}

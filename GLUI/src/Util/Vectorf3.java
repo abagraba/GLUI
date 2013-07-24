@@ -10,6 +10,14 @@ public class Vectorf3 {
 		set(x, y, z);
 	}
 
+	public Vectorf3(Vectorf3 position) {
+		set(position.x, position.y, position.z);
+	}
+
+	public Vectorf3(Vectori3 position) {
+		set(position.x, position.y, position.z);
+	}
+
 	public void set(float x, float y, float z) {
 		this.x = x;
 		this.y = y;
@@ -129,6 +137,16 @@ public class Vectorf3 {
 	}
 
 	/**
+	 * Returns the componentwise product.
+	 * @param a first factor vector.
+	 * @param b scaling factor.
+	 * @return componentwise product vector.
+	 */
+	public static Vectorf3 product(Vectorf3 a, float b) {
+		return new Vectorf3(a.x * b, a.y * b, a.z * b);
+	}
+
+	/**
 	 * Returns the componentwise quotient.
 	 * @param a dividend vector.
 	 * @param b divisor vector.
@@ -186,6 +204,14 @@ public class Vectorf3 {
 
 	public static Vectorf3 zAxis() {
 		return new Vectorf3(0, 0, 1);
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (!(o instanceof Vectorf3))
+			return false;
+		Vectorf3 v = (Vectorf3) o;
+		return !(x != v.x || y != v.y || z != v.z);
 	}
 
 }

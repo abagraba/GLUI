@@ -1,8 +1,8 @@
 package Rendering;
 
-import static Util.GLCONST.ARRAY_BUFFER;
-import static Util.GLCONST.DYNAMIC;
-import static Util.GLCONST.FLOAT;
+import static Util.GLCONST.VBO_ARRAY_BUFFER;
+import static Util.GLCONST.VBO_DYNAMIC;
+import static Util.GLCONST.TYPE_FLOAT;
 
 import java.nio.FloatBuffer;
 
@@ -26,7 +26,7 @@ public class InstanceData {
 			this.vbo = null;
 			return;
 		}
-		vbo = VBOManager.createVBO(name, FLOAT);
+		vbo = VBOManager.createVBO(name, TYPE_FLOAT);
 		this.vbo = vbo;
 	}
 
@@ -44,7 +44,7 @@ public class InstanceData {
 			this.vbo = null;
 			return;
 		}
-		vbo = VBOManager.createStaticVBO(name, data, GLCONST.ARRAY_BUFFER);
+		vbo = VBOManager.createStaticVBO(name, data, GLCONST.VBO_ARRAY_BUFFER);
 		this.vbo = vbo;
 	}
 
@@ -59,17 +59,17 @@ public class InstanceData {
 	}
 
 	public void bufferData(float[] data) {
-		vbo.bufferData(ARRAY_BUFFER, data, DYNAMIC);
-		VBOManager.unbindVBO(ARRAY_BUFFER);
+		vbo.bufferData(VBO_ARRAY_BUFFER, data, VBO_DYNAMIC);
+		VBOManager.unbindVBO(VBO_ARRAY_BUFFER);
 	}
 
 	public void bufferData(FloatBuffer data) {
-		vbo.bufferData(ARRAY_BUFFER, data, DYNAMIC);
-		VBOManager.unbindVBO(ARRAY_BUFFER);
+		vbo.bufferData(VBO_ARRAY_BUFFER, data, VBO_DYNAMIC);
+		VBOManager.unbindVBO(VBO_ARRAY_BUFFER);
 	}
 
 	public void enableBuffer() {
-		VBOManager.bindVBO(vbo, ARRAY_BUFFER);
+		VBOManager.bindVBO(vbo, VBO_ARRAY_BUFFER);
 		interleaving.initInstanceVBO();
 	}
 

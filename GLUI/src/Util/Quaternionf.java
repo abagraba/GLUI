@@ -84,10 +84,16 @@ public class Quaternionf {
 	 * @return Quaternion representing the rotation.
 	 */
 	public static Quaternionf fromAxisAngle(Vectorf3 axis, float angle) {
+		axis.normalize();
 		float hAngle = 0.5f * angle;
 		float hSin = (float) Math.sin(hAngle);
 		float hCos = (float) Math.cos(hAngle);
 		return new Quaternionf(axis.x * hSin, axis.y * hSin, axis.z * hSin, hCos);
+	}
+
+	@Override
+	public String toString() {
+		return String.format("[%f, %f, %f : %f]", x, y, z, w);
 	}
 
 }

@@ -1,8 +1,8 @@
 package Rendering;
 
-import static Util.GLCONST.DYNAMIC;
-import static Util.GLCONST.ELEMENT_ARRAY_BUFFER;
-import static Util.GLCONST.INT;
+import static Util.GLCONST.VBO_DYNAMIC;
+import static Util.GLCONST.VBO_ELEMENT_ARRAY_BUFFER;
+import static Util.GLCONST.TYPE_UINT;
 
 import java.nio.IntBuffer;
 
@@ -27,7 +27,7 @@ public class VBOIndexData {
 			int[] indices = new int[size];
 			for (int i = 0; i < indices.length; i++)
 				indices[i] = begin + i;
-			vbo = VBOManager.createStaticVBO(name, indices, ELEMENT_ARRAY_BUFFER);
+			vbo = VBOManager.createStaticVBO(name, indices, VBO_ELEMENT_ARRAY_BUFFER);
 		}
 		this.vbo = vbo;
 	}
@@ -43,7 +43,7 @@ public class VBOIndexData {
 			this.vbo = null;
 			return;
 		}
-		this.vbo = VBOManager.createVBO(name, INT);
+		this.vbo = VBOManager.createVBO(name, TYPE_UINT);
 	}
 
 	/**
@@ -59,7 +59,7 @@ public class VBOIndexData {
 			this.vbo = null;
 			return;
 		}
-		this.vbo = VBOManager.createStaticVBO(name, data, GLCONST.ELEMENT_ARRAY_BUFFER);
+		this.vbo = VBOManager.createStaticVBO(name, data, GLCONST.VBO_ELEMENT_ARRAY_BUFFER);
 	}
 
 	// FIXME typecheck
@@ -72,23 +72,23 @@ public class VBOIndexData {
 	}
 
 	public void bufferData(int[] data) {
-		vbo.bufferData(ELEMENT_ARRAY_BUFFER, data, DYNAMIC);
+		vbo.bufferData(VBO_ELEMENT_ARRAY_BUFFER, data, VBO_DYNAMIC);
 		size = data.length;
-		VBOManager.unbindVBO(ELEMENT_ARRAY_BUFFER);
+		VBOManager.unbindVBO(VBO_ELEMENT_ARRAY_BUFFER);
 	}
 
 	public void bufferData(IntBuffer data) {
-		vbo.bufferData(ELEMENT_ARRAY_BUFFER, data, DYNAMIC);
+		vbo.bufferData(VBO_ELEMENT_ARRAY_BUFFER, data, VBO_DYNAMIC);
 		size = data.limit();
-		VBOManager.unbindVBO(ELEMENT_ARRAY_BUFFER);
+		VBOManager.unbindVBO(VBO_ELEMENT_ARRAY_BUFFER);
 	}
 
 	public void enableBuffer() {
-		VBOManager.bindVBO(vbo, ELEMENT_ARRAY_BUFFER);
+		VBOManager.bindVBO(vbo, VBO_ELEMENT_ARRAY_BUFFER);
 	}
 
 	public static void disableBuffer() {
-		VBOManager.unbindVBO(ELEMENT_ARRAY_BUFFER);
+		VBOManager.unbindVBO(VBO_ELEMENT_ARRAY_BUFFER);
 	}
 
 	public int getSize() {

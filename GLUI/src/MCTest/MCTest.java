@@ -42,6 +42,8 @@ public class MCTest {
 		ChunkRenderer.init();
 		camera = new Camera(initPos, 0.01f, 100, 80);
 		GL11.glEnable(GL11.GL_DEPTH_TEST);
+		GL11.glEnable(GL11.GL_CULL_FACE);
+		GL11.glCullFace(GL11.GL_BACK);
 	}
 
 	public static void main(String[] args) {
@@ -59,13 +61,17 @@ public class MCTest {
 				chunks.add(c);
 				c.generateRandomTerrain();
 			}
+		long t;
 		while (!Display.isCloseRequested()) {
+			t = System.nanoTime();
 			GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
 			camera();
 			ChunkRenderer.renderChunk(chunks);
-			// ChunkRenderer.renderTest();
 			Display.update();
 			Display.sync(60);
+			System.out.println((System.nanoTime() - t) * 0.000001f + " ms");
+			System.out.println(1000000000f / (System.nanoTime() - t) + " fps");
+
 		}
 
 	}

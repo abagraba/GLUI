@@ -31,6 +31,12 @@ public class ShaderManager {
 		instanceProgram = program;
 	}
 
+	public static void useProgram(String s) {
+		Program p = programs.get(s);
+		p.use();
+		currentProgram = p;
+	}
+
 	/**
 	 * Gets the Program associated with the given name.
 	 * @param name name associated with the Program.

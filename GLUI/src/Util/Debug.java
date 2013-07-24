@@ -27,6 +27,7 @@ public class Debug {
 	public static final byte SHADER_MANAGER = 2;
 	public static final byte RESOURCE_MANAGER = 3;
 	public static final byte INSTANCE_MANAGEMENT = 4;
+	public static final byte FBO = 5;
 
 	public static final boolean[] verbosity = new boolean[128];
 
